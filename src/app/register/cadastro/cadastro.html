@@ -1,0 +1,118 @@
+<main class="auth-page">
+  <section class="auth-card" aria-label="Tela de cadastro">
+    <p class="auth-brand">Toxic Bet</p>
+
+    @if (backendErrorMessage()) {
+      <p class="error-tooltip error-tooltip-global" role="alert" aria-live="polite">
+        {{ backendErrorMessage() }}
+      </p>
+    }
+
+    @if (successMessage()) {
+      <p class="success-tooltip" role="status" aria-live="polite">
+        {{ successMessage() }}
+      </p>
+    }
+
+    <form [formGroup]="cadastroForm" (ngSubmit)="submit()" class="auth-form" novalidate>
+      <div class="field-group">
+        <input
+          id="username"
+          type="text"
+          formControlName="username"
+          autocomplete="username"
+          placeholder="Username"
+          aria-label="Username"
+          [class.input-invalid]="showFieldError('username')"
+          (input)="startTyping('username')"
+          (blur)="stopTyping('username')"
+        />
+        @if (showFieldError('username')) {
+          <p class="error-tooltip" role="alert">Informe um username com ao menos 3 caracteres.</p>
+        }
+      </div>
+
+      <div class="field-group">
+        <input
+          id="first-name"
+          type="text"
+          formControlName="firstName"
+          autocomplete="given-name"
+          placeholder="Nome"
+          aria-label="Nome"
+          [class.input-invalid]="showFieldError('firstName')"
+          (input)="startTyping('firstName')"
+          (blur)="stopTyping('firstName')"
+        />
+        @if (showFieldError('firstName')) {
+          <p class="error-tooltip" role="alert">Informe seu primeiro nome.</p>
+        }
+      </div>
+
+      <div class="field-group">
+        <input
+          id="last-name"
+          type="text"
+          formControlName="lastName"
+          autocomplete="family-name"
+          placeholder="Sobrenome"
+          aria-label="Sobrenome"
+          [class.input-invalid]="showFieldError('lastName')"
+          (input)="startTyping('lastName')"
+          (blur)="stopTyping('lastName')"
+        />
+        @if (showFieldError('lastName')) {
+          <p class="error-tooltip" role="alert">Informe seu sobrenome.</p>
+        }
+      </div>
+
+      <div class="field-group">
+        <input
+          id="email"
+          type="email"
+          formControlName="email"
+          autocomplete="email"
+          placeholder="E-mail"
+          aria-label="E-mail"
+          [class.input-invalid]="showFieldError('email')"
+          (input)="startTyping('email')"
+          (blur)="stopTyping('email')"
+        />
+        @if (showFieldError('email')) {
+          <p class="error-tooltip" role="alert">Informe um e-mail válido.</p>
+        }
+      </div>
+
+      <div class="field-group">
+        <input
+          id="password"
+          type="password"
+          formControlName="password"
+          autocomplete="new-password"
+          placeholder="Senha"
+          aria-label="Senha"
+          [class.input-invalid]="showFieldError('password')"
+          (input)="startTyping('password')"
+          (blur)="stopTyping('password')"
+        />
+        @if (showFieldError('password')) {
+          <p class="error-tooltip" role="alert">
+            Use 8 a 12 caracteres com maiuscula, minuscula, numero e simbolo.
+          </p>
+        }
+      </div>
+
+      <button type="submit" class="auth-button" [disabled]="isSubmitting()">
+        {{ isSubmitting() ? 'Cadastrando...' : 'Cadastrar' }}
+      </button>
+    </form>
+
+    <p class="auth-footer">
+      <a routerLink="/register/login">Voltar para login</a>
+    </p>
+
+    <a class="back-login-link" routerLink="/register/login" aria-label="Voltar para tela de login">
+      <span class="back-icon" aria-hidden="true">↩</span>
+    </a>
+  </section>
+</main>

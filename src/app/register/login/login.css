@@ -1,0 +1,275 @@
+:host {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.auth-page {
+  height: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: 1.5rem;
+  box-sizing: border-box;
+  overflow: hidden;
+  background: radial-gradient(circle at top left, #0ea5a1 0%, #0f172a 55%, #020617 100%);
+}
+
+.auth-card {
+  width: min(105%, 26.52rem);
+  height: 90%;
+  max-height: 90dvh;
+  display: flex;
+  flex-direction: column;
+  border-radius: 1rem;
+  padding: 2rem;
+  box-sizing: border-box;
+  overflow: auto;
+  background: rgb(255 255 255 / 0.96);
+  box-shadow: 0 24px 56px rgb(2 6 23 / 0.35);
+}
+
+.auth-brand {
+  margin: 0;
+  text-align: center;
+  font-size: 1.5rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #0f766e;
+  font-weight: 700;
+}
+
+.toxic-symbol {
+  margin: 0.45rem 0 0;
+  text-align: center;
+  font-size: 3.2rem;
+  line-height: 1;
+  color: #0f172a;
+}
+
+.auth-tagline {
+  margin: 0.45rem 0 1.4rem;
+  text-align: center;
+  color: #475569;
+  font-weight: 600;
+}
+
+.auth-form {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.field-group {
+  display: grid;
+  gap: 0.35rem;
+}
+
+input {
+  border: 1px solid #cbd5e1;
+  border-radius: 0.6rem;
+  padding: 0.75rem;
+  font: inherit;
+}
+
+input:focus {
+  outline: 2px solid #0ea5a1;
+  outline-offset: 2px;
+}
+
+input.input-invalid {
+  border-color: #dc2626;
+  box-shadow: 0 0 0 1px rgb(220 38 38 / 0.25);
+}
+
+.auth-button {
+  margin-top: 0.75rem;
+  border: 0;
+  border-radius: 0.7rem;
+  padding: 0.8rem 1rem;
+  font-weight: 700;
+  background: #0f766e;
+  color: #fff;
+  cursor: pointer;
+}
+
+.auth-button:hover {
+  background: #115e59;
+}
+
+.auth-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.forgot-password-link {
+  margin-top: 0.2rem;
+  border: 0;
+  padding: 0.2rem 0;
+  background: transparent;
+  color: #0f766e;
+  font: inherit;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.error-tooltip {
+  margin: 0;
+  padding: 0.45rem 0.65rem;
+  border-radius: 0.45rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-align: center;
+  color: #fff;
+  background: rgb(185 28 28 / 0.95);
+}
+
+.error-tooltip-global {
+  margin: 0 0 0.8rem;
+}
+
+.success-tooltip {
+  margin: 0 0 0.8rem;
+  padding: 0.45rem 0.65rem;
+  border-radius: 0.45rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-align: center;
+  color: #fff;
+  background: rgb(5 150 105 / 0.95);
+}
+
+.auth-footer {
+  margin: 1.2rem 0 0;
+  color: #334155;
+  text-align: center;
+}
+
+.auth-footer a {
+  color: #0f766e;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.google-login-button {
+  margin-top: 1rem;
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.7rem;
+  background: #fff;
+  color: #0f172a;
+  padding: 0.8rem 1rem;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.google-login-button:hover {
+  background: #f8fafc;
+}
+
+.google-login-button:focus-visible {
+  outline: 2px solid #0ea5a1;
+  outline-offset: 2px;
+}
+
+.google-icon {
+  width: 1.2rem;
+  height: 1.2rem;
+  flex-shrink: 0;
+}
+
+.auth-credit {
+  margin-top: auto;
+  padding-top: 1rem;
+  text-align: center;
+  color: #334155;
+  font-size: 0.8rem;
+}
+
+.auth-credit p {
+  margin: 0;
+}
+
+.auth-credit-links {
+  margin-top: 0.45rem;
+  display: flex;
+  justify-content: center;
+  gap: 0.8rem;
+}
+
+.auth-credit-links a {
+  width: 2rem;
+  height: 2rem;
+  display: inline-grid;
+  place-items: center;
+  border-radius: 999px;
+  color: #0f172a;
+  background: #e2e8f0;
+}
+
+.auth-credit-links a svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 1.25rem;
+  background: rgb(2 6 23 / 0.6);
+  z-index: 20;
+}
+
+.modal-card {
+  position: relative;
+  width: min(105%, 26.52rem);
+  box-sizing: border-box;
+  border-radius: 1rem;
+  padding: 2rem;
+  background: #fff;
+  box-shadow: 0 24px 56px rgb(2 6 23 / 0.35);
+}
+
+.modal-title {
+  margin: 0;
+  color: #0f172a;
+}
+
+.modal-title-center {
+  text-align: center;
+}
+
+.modal-success-action {
+  display: block;
+  margin: 1rem auto 0;
+}
+
+.modal-description {
+  margin: 0.5rem 0 1rem;
+  color: #475569;
+}
+
+.modal-form {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.code-grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 0.4rem;
+}
+
+.code-grid input {
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: 700;
+}

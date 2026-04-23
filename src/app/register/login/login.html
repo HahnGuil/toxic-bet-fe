@@ -1,0 +1,215 @@
+<main class="auth-page">
+  <section class="auth-card" aria-label="Tela de login">
+    <p class="auth-brand">Toxic Bet</p>
+    <p class="toxic-symbol" aria-hidden="true">☢</p>
+    <p class="auth-tagline">A Bet dos veio tóxicos</p>
+
+    @if (backendErrorMessage()) {
+      <p class="error-tooltip error-tooltip-global" role="alert" aria-live="polite">
+        {{ backendErrorMessage() }}
+      </p>
+    }
+
+    <form [formGroup]="loginForm" (ngSubmit)="submit()" class="auth-form" novalidate>
+      <div class="field-group">
+        <input
+          id="email"
+          type="email"
+          formControlName="email"
+          autocomplete="email"
+          placeholder="E-mail"
+          aria-label="E-mail"
+          [class.input-invalid]="showFieldError('email')"
+          (input)="startTyping('email')"
+          (blur)="stopTyping('email')"
+        />
+        @if (showFieldError('email')) {
+          <p class="error-tooltip" role="alert">Informe um e-mail válido.</p>
+        }
+      </div>
+
+      <div class="field-group">
+        <input
+          id="password"
+          type="password"
+          formControlName="password"
+          autocomplete="current-password"
+          placeholder="Senha"
+          aria-label="Senha"
+          [class.input-invalid]="showFieldError('password')"
+          (input)="startTyping('password')"
+          (blur)="stopTyping('password')"
+        />
+        @if (showFieldError('password')) {
+          <p class="error-tooltip" role="alert">A senha deve ter entre 8 e 12 caracteres.</p>
+        }
+      </div>
+
+      <button type="submit" class="auth-button" [disabled]="isSubmitting()">
+        {{ isSubmitting() ? 'Entrando...' : 'Entrar' }}
+      </button>
+
+      <button type="button" class="forgot-password-link" (click)="openResetModal()">
+        Resetar senha
+      </button>
+    </form>
+
+    <p class="auth-footer">
+      <a routerLink="/register/cadastro">Cadastrar</a>
+    </p>
+
+    <button type="button" class="google-login-button" aria-label="Entrar com Google" (click)="loginWithGoogle()">
+      <svg class="google-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path
+          fill="#EA4335"
+          d="M12 10.2v3.9h5.5c-.2 1.3-1.5 3.9-5.5 3.9-3.3 0-6-2.7-6-6s2.7-6 6-6c1.9 0 3.1.8 3.8 1.5l2.6-2.5C16.8 3.4 14.6 2.5 12 2.5 6.8 2.5 2.5 6.8 2.5 12S6.8 21.5 12 21.5c6.9 0 9.1-4.8 9.1-7.3 0-.5 0-.9-.1-1.2z"
+        />
+        <path
+          fill="#34A853"
+          d="M3.6 7.6l3.2 2.4C7.7 8.1 9.7 6.5 12 6.5c1.9 0 3.1.8 3.8 1.5l2.6-2.5C16.8 3.4 14.6 2.5 12 2.5c-3.7 0-6.9 2.1-8.4 5.1z"
+        />
+        <path
+          fill="#FBBC05"
+          d="M12 21.5c2.5 0 4.6-.8 6.1-2.2l-2.8-2.3c-.8.6-1.8 1-3.3 1-2.5 0-4.6-1.7-5.3-4l-3.3 2.5c1.5 3 4.7 5 8.6 5z"
+        />
+        <path
+          fill="#4285F4"
+          d="M21.1 14.2c.1-.4.1-.8.1-1.2s0-.8-.1-1.2H12v2.4h5.5c-.3 1.4-1.1 2.5-2.2 3.2l2.8 2.3c1.8-1.7 3-4.3 3-7.5z"
+        />
+      </svg>
+      <span>Entrar com Google</span>
+    </button>
+
+    <footer class="auth-credit" aria-label="Creditos">
+      <p>Created by Guilherme Hahn</p>
+      <div class="auth-credit-links">
+        <a
+          href="https://www.linkedin.com/in/hahnguil/?locale=en_US"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="LinkedIn de Guilherme Hahn"
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path
+              fill="currentColor"
+              d="M6.94 8.5a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12ZM5.18 19.5h3.52V9.83H5.18V19.5Zm5.53 0h3.37v-5.13c0-1.35.26-2.65 1.93-2.65 1.64 0 1.66 1.53 1.66 2.74v5.04h3.53v-5.75c0-2.83-.61-5.01-3.92-5.01-1.59 0-2.65.87-3.08 1.69h-.05V9.83h-3.44c.04.87 0 9.67 0 9.67Z"
+            />
+          </svg>
+        </a>
+        <a
+          href="https://github.com/HahnGuil"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="GitHub de Guilherme Hahn"
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path
+              fill="currentColor"
+              d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.61-3.37-1.18-3.37-1.18-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.61.07-.61 1 .07 1.53 1.03 1.53 1.03.9 1.53 2.35 1.09 2.92.84.09-.65.35-1.09.64-1.35-2.22-.25-4.56-1.11-4.56-4.95 0-1.1.39-2 1.03-2.71-.1-.25-.45-1.27.1-2.64 0 0 .84-.27 2.75 1.03a9.4 9.4 0 0 1 5 0c1.91-1.3 2.75-1.03 2.75-1.03.55 1.37.2 2.39.1 2.64.64.71 1.03 1.61 1.03 2.71 0 3.85-2.35 4.7-4.59 4.94.36.31.68.92.68 1.86v2.76c0 .26.18.58.69.48A10 10 0 0 0 12 2Z"
+            />
+          </svg>
+        </a>
+      </div>
+    </footer>
+  </section>
+</main>
+
+@if (isResetModalOpen()) {
+  <div class="modal-backdrop" role="dialog" aria-modal="true" aria-label="Recuperar senha">
+    <section class="modal-card">
+      @if (resetInfoMessage()) {
+        <p class="success-tooltip" role="status" aria-live="polite">{{ resetInfoMessage() }}</p>
+      }
+
+      @if (resetErrorMessage()) {
+        <p class="error-tooltip error-tooltip-global" role="alert" aria-live="polite">{{ resetErrorMessage() }}</p>
+      }
+
+      @if (resetStep() === 'request') {
+        <h2 class="modal-title">Recuperar senha</h2>
+        <p class="modal-description">Informe o e-mail cadastrado para receber o codigo de recuperacao.</p>
+
+        <form [formGroup]="resetRequestForm" (ngSubmit)="sendRecoveryCode()" class="modal-form" novalidate>
+          <input
+            id="reset-email"
+            type="email"
+            formControlName="email"
+            placeholder="E-mail"
+            aria-label="E-mail para recuperacao"
+            [class.input-invalid]="showResetRequestEmailError()"
+            (input)="startResetTyping('reset-email')"
+            (blur)="stopResetRequestEmailTyping()"
+          />
+          @if (showResetRequestEmailError()) {
+            <p class="error-tooltip" role="alert">Informe um e-mail valido.</p>
+          }
+
+          <button type="submit" class="auth-button" [disabled]="isResetSubmitting()">
+            {{ isResetSubmitting() ? 'Enviando...' : 'Enviar codigo' }}
+          </button>
+        </form>
+      }
+
+      @if (resetStep() === 'code') {
+        <h2 class="modal-title">Validar codigo</h2>
+        <p class="modal-description">Digite o codigo de 6 digitos enviado para {{ resetEmail() }}.</p>
+
+        <form [formGroup]="resetCodeForm" (ngSubmit)="validateRecoveryCode()" class="modal-form" novalidate>
+          <div class="code-grid">
+            @for (field of resetCodeFields; track field; let i = $index) {
+              <input
+                [id]="'reset-code-' + i"
+                type="text"
+                inputmode="numeric"
+                maxlength="1"
+                [formControlName]="field"
+                [class.input-invalid]="showResetCodeFieldError(field)"
+                [attr.aria-label]="'Digito ' + (i + 1) + ' do codigo'"
+                (input)="onResetCodeInput(field, $event, i)"
+                (blur)="stopResetCodeTyping(field)"
+                (keydown)="onResetCodeKeyDown($event, i)"
+              />
+            }
+          </div>
+
+          <button type="submit" class="auth-button" [disabled]="isResetSubmitting()">
+            {{ isResetSubmitting() ? 'Validando...' : 'Validar codigo' }}
+          </button>
+        </form>
+      }
+
+      @if (resetStep() === 'new-password') {
+        <h2 class="modal-title">Nova senha</h2>
+        <p class="modal-description">Crie uma nova senha com 8 a 12 caracteres.</p>
+
+        <form [formGroup]="resetPasswordForm" (ngSubmit)="updatePassword()" class="modal-form" novalidate>
+          <input
+            id="new-password"
+            type="password"
+            formControlName="newPassword"
+            autocomplete="new-password"
+            placeholder="Nova senha"
+            aria-label="Nova senha"
+            [class.input-invalid]="showResetNewPasswordError()"
+            (input)="startResetTyping('new-password')"
+            (blur)="stopResetNewPasswordTyping()"
+          />
+          @if (showResetNewPasswordError()) {
+            <p class="error-tooltip" role="alert">
+              Use 8 a 12 caracteres com maiuscula, minuscula, numero e simbolo.
+            </p>
+          }
+
+          <button type="submit" class="auth-button" [disabled]="isResetSubmitting()">
+            {{ isResetSubmitting() ? 'Atualizando...' : 'Atualizar senha' }}
+          </button>
+        </form>
+      }
+
+      @if (resetStep() === 'success') {
+        <h2 class="modal-title modal-title-center">Senha atualizada!</h2>
+        <button type="button" class="auth-button modal-success-action" (click)="closeResetModal()">Fechar</button>
+      }
+    </section>
+  </div>
+}

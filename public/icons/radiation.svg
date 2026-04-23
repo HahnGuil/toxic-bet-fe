@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Radiation icon">
+  <rect width="512" height="512" rx="96" fill="#081420"/>
+  <circle cx="256" cy="256" r="48" fill="#fbbf24"/>
+  <g fill="#f59e0b">
+    <path d="M256 72c42 0 79 22 100 55l-72 42a64 64 0 0 0-56 0l-72-42c21-33 58-55 100-55z"/>
+    <path d="M96 348c-21-36-21-79 0-115l72 42a64 64 0 0 0 28 49v84c-42-10-78-31-100-60z"/>
+    <path d="M416 348c-22 29-58 50-100 60v-84a64 64 0 0 0 28-49l72-42c21 36 21 79 0 115z"/>
+  </g>
+  <circle cx="256" cy="256" r="24" fill="#111827"/>
+</svg>
