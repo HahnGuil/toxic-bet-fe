@@ -5,24 +5,36 @@ import {
   writeResponseToNodeResponse,
 } from '@angular/ssr/node';
 import express from 'express';
+import { createProxyMiddleware } from 'http-proxy-middleware';
 import { join } from 'node:path';
 
 const browserDistFolder = join(import.meta.dirname, '../browser');
+const apiTarget = process.env['API_TARGET'] || 'http://toxic-bet-api:20000';
+const authTarget = process.env['AUTH_TARGET'] || 'http://ms-auth-server:2300';
 
 const app = express();
 const angularApp = new AngularNodeAppEngine();
 
-/**
- * Example Express Rest API endpoints can be defined here.
- * Uncomment and define endpoints as necessary.
- *
- * Example:
- * ```ts
- * app.get('/api/{*splat}', (req, res) => {
- *   // Handle API request
- * });
- * ```
- */
+app.use(
+  '/api',
+  createProxyMiddleware({
+    target: apiTarget,
+    changeOrigin: true,
+    xfwd: true,
+    pathRewrite: {
+      '^/api': '',
+    },
+  }),
+);
+
+app.use(
+  '/auth-server',
+  createProxyMiddleware({
+    target: authTarget,
+    changeOrigin: true,
+    xfwd: true,
+  }),
+);
 
 /**
  * Serve static files from /browser

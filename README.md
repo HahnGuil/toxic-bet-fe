@@ -1,59 +1,84 @@
-# ToxicBetFe
+# Toxic Bet FE (Angular PWA)
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.8.
+Aplicacao Angular 21 configurada como PWA para instalacao direta em dispositivos moveis (sem publicacao em loja).
 
-## Development server
+## O que foi preparado
 
-To start a local development server, run:
+- PWA com manifest e Service Worker ativos em producao.
+- Tela inicial mobile-first com:
+  - botao de instalacao (quando suportado pelo navegador);
+  - status online/offline do dispositivo;
+  - validacao de conectividade com API e Auth Server.
+- Proxy no servidor SSR para os dois back-ends:
+  - /api -> API principal
+  - /auth-server -> servidor de autenticacao
+- Dockerfile e docker-compose para executar o front em container.
 
-```bash
-ng serve
-```
+## Requisitos
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+- Node.js 22+
+- npm 10+
 
-## Code scaffolding
+## Rodando localmente
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
+1. Instale dependencias:
 
 ```bash
-ng build
+npm ci
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+2. Execute em desenvolvimento:
 
 ```bash
-ng test
+npm start
 ```
 
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
+3. Build de producao:
 
 ```bash
-ng e2e
+npm run build
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+## Como instalar no celular (sem loja)
 
-## Additional Resources
+1. Publique a aplicacao em HTTPS (ou localhost para testes locais).
+2. Abra no navegador do celular:
+   - Android (Chrome/Edge): menu -> "Instalar app" / "Adicionar a tela inicial".
+   - iOS (Safari): compartilhar -> "Adicionar a Tela de Inicio".
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+## Configuracao dos back-ends
+
+O front usa proxy SSR para evitar CORS no navegador.
+
+- API principal: variavel API_TARGET (padrao http://toxic-bet-api:20000)
+- Auth server: variavel AUTH_TARGET (padrao http://ms-auth-server:2300)
+
+## Docker
+
+### 1) Subir apenas o front
+
+```bash
+docker compose up -d --build
+```
+
+A aplicacao ficara em http://localhost:4200.
+
+### 2) Variaveis de ambiente
+
+Copie .env.example para .env e ajuste, se necessario:
+
+```bash
+cp .env.example .env
+```
+
+### 3) Rede compartilhada com back-ends
+
+O compose do front espera uma rede Docker externa chamada shared-services (ou o nome definido em SHARED_SERVICES_NETWORK).
+
+Se ainda nao existir:
+
+```bash
+docker network create shared-services
+```
+
+Depois suba seus back-ends na mesma rede (como nos compose que voce compartilhou) para o front resolver os hosts toxic-bet-api e ms-auth-server.
