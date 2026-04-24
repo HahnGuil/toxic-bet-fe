@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { finalize } from 'rxjs';
 
 import { AuthService } from '../services/auth.service';
@@ -16,8 +16,10 @@ export class Login {
   protected readonly resetCodeFields = ['digit1', 'digit2', 'digit3', 'digit4', 'digit5', 'digit6'] as const;
 
   private readonly authService = inject(AuthService);
+  private readonly router = inject(Router);
 
   protected readonly isSubmitting = signal(false);
+  protected readonly isPageTransitioning = signal(false);
   protected readonly submitAttempted = signal(false);
   protected readonly activeTypingField = signal<'email' | 'password' | null>(null);
   protected readonly backendErrorMessage = signal<string | null>(null);
@@ -105,9 +107,13 @@ export class Login {
       .login(this.loginForm.getRawValue())
       .pipe(finalize(() => this.isSubmitting.set(false)))
       .subscribe({
-        next: () => {
+        next: async () => {
           this.loginForm.reset();
           this.submitAttempted.set(false);
+          this.isPageTransitioning.set(true);
+          setTimeout(async () => {
+            await this.router.navigate(['/match']);
+          }, 220);
         },
         error: (error: unknown) => {
           this.backendErrorMessage.set(this.authService.toUserErrorMessage(error));

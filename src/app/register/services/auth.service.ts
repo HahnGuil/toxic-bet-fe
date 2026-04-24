@@ -1,9 +1,10 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
-import { Observable, tap } from 'rxjs';
+import { Observable, map, switchMap, tap } from 'rxjs';
 
 import { AuthApiService } from './auth-api.service';
 import { AuthSessionService } from './auth-session.service';
+import { ToxicBetUserService } from './toxic-bet-user.service';
 import {
   ErrorResponse,
   LoginRequest,
@@ -20,12 +21,16 @@ import {
 export class AuthService {
   private readonly authApiService = inject(AuthApiService);
   private readonly authSessionService = inject(AuthSessionService);
+  private readonly toxicBetUserService = inject(ToxicBetUserService);
 
   login(request: LoginRequest): Observable<LoginResponse> {
     return this.authApiService.login(request).pipe(
       tap((response) => {
         this.authSessionService.startSession(response);
       }),
+      switchMap((response) => this.toxicBetUserService.ensureRegistered(response.userName, response.email).pipe(
+        map(() => response),
+      )),
     );
   }
 
@@ -38,6 +43,9 @@ export class AuthService {
       tap((response) => {
         this.authSessionService.startSession(response);
       }),
+      switchMap((response) => this.toxicBetUserService.ensureRegistered(response.userName, response.email).pipe(
+        map(() => response),
+      )),
     );
   }
 
@@ -51,6 +59,10 @@ export class AuthService {
 
   resetPassword(newPassword: string, recoverToken: string): Observable<void> {
     return this.authApiService.resetPassword({ newPassword }, recoverToken);
+  }
+
+  logout(email: string): Observable<void> {
+    return this.authApiService.logout({ email });
   }
 
   toUserErrorMessage(error: unknown): string {
@@ -72,7 +84,7 @@ export class AuthService {
       return 'E-mail ou senha invalidos.';
     }
 
-    return 'Falha ao autenticar no servidor. Tente novamente.';
+    return 'Falha ao autenticar ou sincronizar seu acesso no Toxic Bet. Tente novamente.';
   }
 
   toUserRegisterErrorMessage(error: unknown): string {
@@ -98,7 +110,7 @@ export class AuthService {
       return 'Revise os dados informados para concluir o cadastro.';
     }
 
-    return 'Falha ao cadastrar no servidor. Tente novamente.';
+    return 'Falha ao cadastrar ou sincronizar seu acesso no Toxic Bet. Tente novamente.';
   }
 
   toUserPasswordRecoveryErrorMessage(error: unknown): string {

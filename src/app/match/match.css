@@ -1,0 +1,115 @@
+:host {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.match-page {
+  height: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: block;
+  padding: 0;
+  box-sizing: border-box;
+  overflow: hidden;
+  opacity: 1;
+  transition: opacity 220ms ease;
+  animation: match-fade-in 260ms ease both;
+  background: radial-gradient(circle at top left, #0ea5a1 0%, #0f172a 55%, #020617 100%);
+}
+
+.match-page.page-fade-out {
+  opacity: 0;
+}
+
+.match-shell {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-rows: 4.9rem 1fr 6rem;
+  box-sizing: border-box;
+  overflow: hidden;
+  background: rgb(255 255 255 / 0.96);
+}
+
+.match-header {
+  background: #115e59;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 1.25rem;
+}
+
+.brand-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: #fff;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.brand-icon {
+  font-size: 1.35rem;
+  line-height: 1;
+}
+
+.brand-text {
+  font-size: 1rem;
+}
+
+.logoff-link {
+  width: 2rem;
+  height: 2rem;
+  border: 0;
+  border-radius: 999px;
+  display: inline-grid;
+  place-items: center;
+  padding: 0;
+  background: rgb(255 255 255 / 0.16);
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 140ms ease, transform 140ms ease;
+}
+
+.logoff-link svg {
+  width: 1.15rem;
+  height: 1.15rem;
+}
+
+.logoff-link:hover:not(:disabled) {
+  background: rgb(255 255 255 / 0.26);
+  transform: translateX(1px);
+}
+
+.logoff-link:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.match-content {
+  padding: 1.5rem;
+  display: grid;
+  align-content: start;
+  gap: 0.75rem;
+}
+
+.match-content h1,
+.match-content p {
+  margin: 0;
+  color: #0f172a;
+}
+
+.match-footer {
+  background: #115e59;
+}
+
+@keyframes match-fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}

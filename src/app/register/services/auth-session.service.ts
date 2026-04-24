@@ -124,6 +124,10 @@ export class AuthSessionService {
     return this.sessionState()?.token ?? null;
   }
 
+  getSessionEmail(): string | null {
+    return this.sessionState()?.email ?? null;
+  }
+
   private refreshSessionTokenIfNeeded(): void {
     const session = this.sessionState();
     if (!session || this.isRefreshing) {

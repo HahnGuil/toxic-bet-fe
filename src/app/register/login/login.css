@@ -13,7 +13,24 @@
   padding: 1.5rem;
   box-sizing: border-box;
   overflow: hidden;
+  opacity: 1;
+  transition: opacity 220ms ease;
+  animation: login-fade-in 260ms ease both;
   background: radial-gradient(circle at top left, #0ea5a1 0%, #0f172a 55%, #020617 100%);
+}
+
+.auth-page.page-fade-out {
+  opacity: 0;
+}
+
+@keyframes login-fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 .auth-card {

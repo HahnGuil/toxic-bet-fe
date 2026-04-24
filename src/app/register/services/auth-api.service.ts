@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 
 import { environment } from '../../../environments/environment';
 import {
+  LogoffRequest,
   LoginRequest,
   LoginResponse,
   NewPasswordRequest,
@@ -60,6 +61,12 @@ export class AuthApiService {
         }),
       },
     );
+  }
+
+  logout(request: LogoffRequest): Observable<void> {
+    return this.http.delete<void>(`${this.authServerBaseUrl}/login`, {
+      body: request,
+    });
   }
 
   startGoogleLogin(): void {

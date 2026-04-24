@@ -54,3 +54,7 @@ export interface ErrorResponse {
   timestamp?: string;
   message?: string;
 }
+
+export interface LogoffRequest {
+  email: string;
+}

@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { finalize } from 'rxjs';
 
 import { AuthService } from '../services/auth.service';
@@ -14,6 +14,7 @@ import { AuthService } from '../services/auth.service';
 })
 export class Cadastro {
   private readonly authService = inject(AuthService);
+  private readonly router = inject(Router);
 
   protected readonly isSubmitting = signal(false);
   protected readonly submitAttempted = signal(false);
@@ -97,10 +98,10 @@ export class Cadastro {
       })
       .pipe(finalize(() => this.isSubmitting.set(false)))
       .subscribe({
-        next: () => {
+        next: async () => {
           this.cadastroForm.reset();
           this.submitAttempted.set(false);
-          this.successMessage.set('Cadastro realizado com sucesso. Agora voce pode fazer login.');
+          await this.router.navigate(['/match']);
         },
         error: (error: unknown) => {
           this.backendErrorMessage.set(this.authService.toUserRegisterErrorMessage(error));

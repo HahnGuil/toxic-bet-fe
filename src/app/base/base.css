@@ -1,0 +1,117 @@
+:host {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.base-page {
+  height: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: block;
+  padding: 0;
+  box-sizing: border-box;
+  overflow: hidden;
+  opacity: 1;
+  transition: opacity 220ms ease;
+  animation: base-fade-in 260ms ease both;
+  background: radial-gradient(circle at top left, #0ea5a1 0%, #0f172a 55%, #020617 100%);
+}
+
+.base-page.page-fade-out {
+  opacity: 0;
+}
+
+.base-card {
+  width: 100%;
+  height: 100%;
+  max-height: none;
+  display: grid;
+  grid-template-rows: 4.9rem 1fr 6rem;
+  border-radius: 0;
+  box-sizing: border-box;
+  overflow: hidden;
+  background: rgb(255 255 255 / 0.96);
+  box-shadow: none;
+}
+
+.base-header {
+  background: #115e59;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 1.25rem;
+}
+
+.brand-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: #fff;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.brand-icon {
+  font-size: 1.35rem;
+  line-height: 1;
+}
+
+.brand-text {
+  font-size: 1rem;
+}
+
+.logoff-link {
+  width: 2rem;
+  height: 2rem;
+  border: 0;
+  border-radius: 999px;
+  display: inline-grid;
+  place-items: center;
+  padding: 0;
+  background: rgb(255 255 255 / 0.16);
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 140ms ease, transform 140ms ease;
+}
+
+.logoff-link svg {
+  width: 1.15rem;
+  height: 1.15rem;
+}
+
+.logoff-link:hover:not(:disabled) {
+  background: rgb(255 255 255 / 0.26);
+  transform: translateX(1px);
+}
+
+.logoff-link:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.base-content {
+  padding: 1.25rem;
+  display: grid;
+  align-content: start;
+}
+
+.base-content h1 {
+  margin: 0;
+  color: #0f172a;
+  font-size: 1.1rem;
+}
+
+.base-footer {
+  background: #115e59;
+}
+
+@keyframes base-fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
