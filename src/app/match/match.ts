@@ -17,6 +17,11 @@ export class Match {
 
   protected readonly isLoggingOut = signal(false);
   protected readonly isPageTransitioning = signal(false);
+  protected readonly selectedMatchView = signal<'all' | 'open'>('all');
+
+  protected selectMatchView(view: 'all' | 'open'): void {
+    this.selectedMatchView.set(view);
+  }
 
   protected logoff(): void {
     if (this.isLoggingOut()) {
