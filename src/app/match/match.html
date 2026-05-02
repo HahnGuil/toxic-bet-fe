@@ -81,8 +81,8 @@
 
       @if (selectedMatchView() === 'open') {
         <section class="match-list" aria-label="Partidas abertas para apostas">
-          @for (match of openMatches(); track match.matchId) {
-            <app-match-card [match]="match" />
+          @for (match of filteredOpenMatches(); track match.matchId) {
+            <app-match-card [match]="match" (betPlaced)="onBetPlaced($event)" />
           } @empty {
             <p class="match-list-empty">Nenhuma partida aberta para apostas.</p>
           }

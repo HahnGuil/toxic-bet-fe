@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { ChampionshipApiService, Championship } from './championship-api.service';
 import { MatchApiService, MatchResponse } from './match-api.service';
+import { BetApiService } from './bet-api.service';
 import { MatchCard } from './match-card/match-card';
 import { AuthService } from '../register/services/auth.service';
 import { AuthSessionService } from '../register/services/auth-session.service';
@@ -25,20 +26,29 @@ export class Match implements OnDestroy {
 
   private readonly championshipApi = inject(ChampionshipApiService);
   private readonly matchApi = inject(MatchApiService);
+  private readonly betApi = inject(BetApiService);
 
   protected readonly championships = signal<Championship[]>([]);
   protected readonly selectedChampionship = signal<Championship | null>(null);
   protected readonly isLoadingChampionships = signal(false);
   protected readonly matches = signal<MatchResponse[]>([]);
   protected readonly openMatches = signal<MatchResponse[]>([]);
+  protected readonly bettedMatchIds = signal<Set<number>>(new Set());
+
+  protected readonly filteredOpenMatches = computed(() => {
+    const betted = this.bettedMatchIds();
+    return this.openMatches().filter((m) => !betted.has(m.matchId));
+  });
 
   private matchStreamSub: Subscription | null = null;
   private openMatchStreamSub: Subscription | null = null;
+  private userBetsSub: Subscription | null = null;
 
   constructor() {
     this.loadChampionships();
     this.loadMatches();
     this.loadOpenMatches();
+    this.loadUserBets();
   }
 
   private loadMatches(): void {
@@ -90,6 +100,24 @@ export class Match implements OnDestroy {
   ngOnDestroy(): void {
     this.matchStreamSub?.unsubscribe();
     this.openMatchStreamSub?.unsubscribe();
+    this.userBetsSub?.unsubscribe();
+  }
+
+  private loadUserBets(): void {
+    this.userBetsSub = this.betApi.streamUserBets().subscribe({
+      next: (bet) => {
+        if (bet.matchId != null) {
+          this.bettedMatchIds.update((current) => new Set([...current, bet.matchId!]));
+        }
+      },
+      error: (err) => {
+        console.error('[Match] user bets stream error:', err);
+      },
+    });
+  }
+
+  protected onBetPlaced(matchId: number): void {
+    this.bettedMatchIds.update((current) => new Set([...current, matchId]));
   }
 
   protected loadChampionships(): void {

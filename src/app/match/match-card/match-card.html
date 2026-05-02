@@ -16,13 +16,13 @@
 
     <div class="odds-row">
       <button type="button" class="odds-rect" [class.odds-rect--selected]="selectedOdd() === 'home'" (click)="toggleOdd('home')">
-        <span class="odds-value">{{ formatOdds(match().homeTeamOdds) }}</span>
+        <span class="odds-value">{{ formatOdds(displayedMatch().homeTeamOdds) }}</span>
       </button>
       <button type="button" class="odds-rect" [class.odds-rect--selected]="selectedOdd() === 'draw'" (click)="toggleOdd('draw')">
-        <span class="odds-value">{{ formatOdds(match().drawTeamOdds) }}</span>
+        <span class="odds-value">{{ formatOdds(displayedMatch().drawTeamOdds) }}</span>
       </button>
       <button type="button" class="odds-rect" [class.odds-rect--selected]="selectedOdd() === 'visiting'" (click)="toggleOdd('visiting')">
-        <span class="odds-value">{{ formatOdds(match().visitingTeamOdds) }}</span>
+        <span class="odds-value">{{ formatOdds(displayedMatch().visitingTeamOdds) }}</span>
       </button>
     </div>
 
@@ -36,7 +36,15 @@
   <footer class="card-footer">
     <span class="match-time">{{ match().matchTime }}</span>
     @if (match().result === 'OPEN_FOR_BETTING') {
-      <button type="button" class="place-bet-btn" [class.place-bet-btn--active]="selectedOdd() !== null" (click)="placeBet()">PLACE BET</button>
+      <button
+        type="button"
+        class="place-bet-btn"
+        [class.place-bet-btn--active]="selectedOdd() !== null"
+        [disabled]="isSubmitting()"
+        (click)="placeBet()"
+      >
+        {{ isSubmitting() ? 'PLACING...' : 'PLACE BET' }}
+      </button>
     } @else {
       <span class="match-result" [class]="resultClass(match().result)">
         {{ resultLabel(match().result) }}
@@ -45,8 +53,41 @@
   </footer>
 </article>
 
-@if (showBetError()) {
-  <div class="bet-error-banner" role="alert" (click)="dismissError()">
-    You need to select a odd to place a bet
+@if (showSelectOddError()) {
+  <div class="bet-banner bet-banner--error" role="alert" (click)="dismissSelectOddError()">
+    You need to select an odd to place a bet
   </div>
 }
+
+@if (submitError()) {
+  <div class="bet-banner bet-banner--error" role="alert" (click)="dismissSubmitError()">
+    {{ submitError() }}
+  </div>
+}
+
+@if (showSuccess()) {
+  <div class="bet-banner bet-banner--success" role="status" (click)="dismissSuccess()">
+    Bet placed successfully!
+  </div>
+}
+
+@if (showOddsChangedPopup()) {
+  <div class="odds-popup-overlay" role="dialog" aria-modal="true" aria-label="Odds changed">
+    <div class="odds-popup">
+      <p class="odds-popup-message">
+        The odds for this match have changed to
+        <strong>{{ formatOdds(updatedOddsValue()) }}</strong>.
+        Do you want to confirm your bet with the updated odds?
+      </p>
+      <div class="odds-popup-actions">
+        <button type="button" class="odds-popup-btn odds-popup-btn--confirm" (click)="confirmBet()">
+          CONFIRM BET
+        </button>
+        <button type="button" class="odds-popup-btn odds-popup-btn--cancel" (click)="cancelBet()">
+          CANCEL
+        </button>
+      </div>
+    </div>
+  </div>
+}
+

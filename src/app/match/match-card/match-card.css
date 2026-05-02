@@ -194,10 +194,8 @@
   background: #0a3d39;
 }
 
-.bet-error-banner {
+.bet-banner {
   margin-top: 0.5rem;
-  background: #dc2626;
-  color: #fff;
   font-size: 0.82rem;
   font-weight: 600;
   padding: 0.6rem 1rem;
@@ -206,6 +204,82 @@
   cursor: pointer;
   user-select: none;
   animation: error-fade-in 180ms ease both;
+}
+
+.bet-banner--error {
+  background: #dc2626;
+  color: #fff;
+}
+
+.bet-banner--success {
+  background: #16a34a;
+  color: #fff;
+}
+
+/* ── Odds changed popup ── */
+.odds-popup-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: error-fade-in 180ms ease both;
+}
+
+.odds-popup {
+  background: #fff;
+  border-radius: 0.75rem;
+  padding: 1.5rem 1.25rem 1.25rem;
+  width: min(90vw, 22rem);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.22);
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.odds-popup-message {
+  font-size: 0.9rem;
+  color: #0f172a;
+  line-height: 1.5;
+  text-align: center;
+  margin: 0;
+}
+
+.odds-popup-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.6rem;
+}
+
+.odds-popup-btn {
+  border: none;
+  border-radius: 0.4rem;
+  padding: 0.55rem 0.5rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: background 140ms ease;
+}
+
+.odds-popup-btn--confirm {
+  background: #115e59;
+  color: #fff;
+}
+
+.odds-popup-btn--confirm:hover {
+  background: #0f4f4a;
+}
+
+.odds-popup-btn--cancel {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+.odds-popup-btn--cancel:hover {
+  background: #e2e8f0;
 }
 
 @keyframes error-fade-in {
