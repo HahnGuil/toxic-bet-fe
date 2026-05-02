@@ -35,8 +35,12 @@
 
   <footer class="card-footer">
     <span class="match-time">{{ match().matchTime }}</span>
-    <span class="match-result" [class]="resultClass(match().result)">
-      {{ resultLabel(match().result) }}
-    </span>
+    @if (match().result === 'OPEN_FOR_BETTING') {
+      <button type="button" class="place-bet-btn">PLACE BET</button>
+    } @else {
+      <span class="match-result" [class]="resultClass(match().result)">
+        {{ resultLabel(match().result) }}
+      </span>
+    }
   </footer>
 </article>
