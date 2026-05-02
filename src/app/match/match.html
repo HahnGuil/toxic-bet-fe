@@ -31,42 +31,64 @@
       </button>
     </header>
 
-    <section class="match-content" aria-label="Conteudo principal">
-      <div class="championship-dropdown-wrap">
-        <select
-          id="championship-select"
-          class="championship-dropdown"
-          [ngClass]="{ 'championship-selected': selectedChampionship() }"
-          (change)="onChampionshipChange($event)"
-        >
-          <option value="" selected hidden>Campeonatos</option>
-          <option *ngFor="let champ of championships()" [value]="champ.idChampionship" [selected]="selectedChampionship()?.idChampionship === champ.idChampionship">
-            {{ champ.name }}
-          </option>
-        </select>
-      </div>
-      <div class="match-view-switcher" aria-label="Selecionar visualizacao de partidas" role="tablist">
-        <button
-          type="button"
-          class="match-view-option match-view-option-left"
-          [class.match-view-option-active]="selectedMatchView() === 'all'"
-          [attr.aria-selected]="selectedMatchView() === 'all'"
-          (click)="selectMatchView('all')"
-        >
-          ALL MATCHES
-        </button>
+    <div class="match-body">
+      <section class="match-content" aria-label="Conteudo principal">
+        <div class="championship-dropdown-wrap">
+          <select
+            id="championship-select"
+            class="championship-dropdown"
+            [ngClass]="{ 'championship-selected': selectedChampionship() }"
+            (change)="onChampionshipChange($event)"
+          >
+            <option value="" selected hidden>Campeonatos</option>
+            <option *ngFor="let champ of championships()" [value]="champ.idChampionship" [selected]="selectedChampionship()?.idChampionship === champ.idChampionship">
+              {{ champ.name }}
+            </option>
+          </select>
+        </div>
+        <div class="match-view-switcher" aria-label="Selecionar visualizacao de partidas" role="tablist">
+          <button
+            type="button"
+            class="match-view-option match-view-option-left"
+            [class.match-view-option-active]="selectedMatchView() === 'all'"
+            [attr.aria-selected]="selectedMatchView() === 'all'"
+            (click)="selectMatchView('all')"
+          >
+            ALL MATCHES
+          </button>
 
-        <button
-          type="button"
-          class="match-view-option match-view-option-right"
-          [class.match-view-option-active]="selectedMatchView() === 'open'"
-          [attr.aria-selected]="selectedMatchView() === 'open'"
-          (click)="selectMatchView('open')"
-        >
-          OPEN TO BET
-        </button>
-      </div>
-    </section>
+          <button
+            type="button"
+            class="match-view-option match-view-option-right"
+            [class.match-view-option-active]="selectedMatchView() === 'open'"
+            [attr.aria-selected]="selectedMatchView() === 'open'"
+            (click)="selectMatchView('open')"
+          >
+            OPEN TO BET
+          </button>
+        </div>
+      </section>
+
+      @if (selectedMatchView() === 'all') {
+        <section class="match-list" aria-label="Lista de partidas">
+          @for (match of matches(); track match.matchId) {
+            <app-match-card [match]="match" />
+          } @empty {
+            <p class="match-list-empty">Nenhuma partida disponível.</p>
+          }
+        </section>
+      }
+
+      @if (selectedMatchView() === 'open') {
+        <section class="match-list" aria-label="Partidas abertas para apostas">
+          @for (match of openMatches(); track match.matchId) {
+            <app-match-card [match]="match" />
+          } @empty {
+            <p class="match-list-empty">Nenhuma partida aberta para apostas.</p>
+          }
+        </section>
+      }
+    </div>
 
     <footer class="match-footer" aria-label="Rodape principal"></footer>
   </section>

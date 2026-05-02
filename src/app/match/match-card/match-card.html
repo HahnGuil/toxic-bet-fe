@@ -1,0 +1,42 @@
+<article class="match-card">
+  <header class="card-header">
+    <span class="championship-name">{{ match().championshipName }}</span>
+  </header>
+
+  <div class="card-body">
+    <div class="teams-row">
+      <div class="team-box">
+        <span class="team-name">{{ match().homeTeamName }}</span>
+      </div>
+      <span class="teams-separator" aria-hidden="true">X</span>
+      <div class="team-box">
+        <span class="team-name">{{ match().visitingTeamName }}</span>
+      </div>
+    </div>
+
+    <div class="odds-row">
+      <div class="odds-rect">
+        <span class="odds-value">{{ formatOdds(match().homeTeamOdds) }}</span>
+      </div>
+      <div class="odds-rect">
+        <span class="odds-value">{{ formatOdds(match().drawTeamOdds) }}</span>
+      </div>
+      <div class="odds-rect">
+        <span class="odds-value">{{ formatOdds(match().visitingTeamOdds) }}</span>
+      </div>
+    </div>
+
+    <div class="odds-labels">
+      <span>HOME</span>
+      <span>DRAW</span>
+      <span>VISITING</span>
+    </div>
+  </div>
+
+  <footer class="card-footer">
+    <span class="match-time">{{ match().matchTime }}</span>
+    <span class="match-result" [class]="resultClass(match().result)">
+      {{ resultLabel(match().result) }}
+    </span>
+  </footer>
+</article>
