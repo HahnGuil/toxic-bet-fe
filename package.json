@@ -4,7 +4,9 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "start:aws": "ng serve --configuration aws",
     "build": "ng build",
+    "build:aws": "ng build --configuration aws",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:toxic-bet-fe": "node dist/toxic-bet-fe/server/server.mjs"

@@ -1,3 +1,5 @@
+// ...existing code...
+// ...existing code...
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
@@ -13,6 +15,9 @@ import { AuthService } from '../services/auth.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Login {
+    protected loginWithGoogle(): void {
+      this.authService.loginWithGoogle();
+    }
   protected readonly resetCodeFields = ['digit1', 'digit2', 'digit3', 'digit4', 'digit5', 'digit6'] as const;
 
   private readonly authService = inject(AuthService);
@@ -121,9 +126,6 @@ export class Login {
       });
   }
 
-  protected loginWithGoogle(): void {
-    this.authService.loginWithGoogle();
-  }
 
   protected openResetModal(): void {
     this.resetAllRecoveryState();

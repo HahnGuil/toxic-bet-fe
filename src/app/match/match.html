@@ -32,6 +32,19 @@
     </header>
 
     <section class="match-content" aria-label="Conteudo principal">
+      <div class="championship-dropdown-wrap">
+        <select
+          id="championship-select"
+          class="championship-dropdown"
+          [ngClass]="{ 'championship-selected': selectedChampionship() }"
+          (change)="onChampionshipChange($event)"
+        >
+          <option value="" selected hidden>Campeonatos</option>
+          <option *ngFor="let champ of championships()" [value]="champ.idChampionship" [selected]="selectedChampionship()?.idChampionship === champ.idChampionship">
+            {{ champ.name }}
+          </option>
+        </select>
+      </div>
       <div class="match-view-switcher" aria-label="Selecionar visualizacao de partidas" role="tablist">
         <button
           type="button"

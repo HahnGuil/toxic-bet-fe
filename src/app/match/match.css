@@ -1,3 +1,55 @@
+.championship-dropdown-wrap {
+  width: min(100%, 24rem);
+  margin: 0 auto 1.1rem auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.championship-label {
+  font-size: 0.98rem;
+  font-weight: 700;
+  color: #115e59;
+  margin-bottom: 0.25rem;
+  margin-left: 0.1rem;
+}
+
+.championship-dropdown {
+  width: 100%;
+  min-height: 2.5rem;
+  border-radius: 0.5rem;
+  border: 1.5px solid #115e59;
+  background: #fff;
+  color: #115e59;
+  font-size: 1.05rem;
+  font-weight: 490; /* 30% menor que 700 */
+  padding: 0.45rem 0.9rem;
+  transition: background 140ms, color 140ms;
+  outline: none;
+  cursor: pointer;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.championship-dropdown:focus-visible {
+  outline: 2px solid #0f172a;
+  outline-offset: 2px;
+}
+
+.championship-selected {
+  background: rgba(17, 94, 89, 0.85) !important; /* 15% menos opaco */
+  color: #fff !important;
+}
+/* Ajuste visual para as options do dropdown */
+.championship-dropdown option {
+  font-weight: 490;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
 :host {
   display: block;
   width: 100%;

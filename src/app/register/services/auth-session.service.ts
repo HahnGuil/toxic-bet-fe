@@ -1,3 +1,4 @@
+// ...existing code...
 import { Injectable, inject, signal } from '@angular/core';
 import { finalize } from 'rxjs';
 
@@ -17,13 +18,41 @@ interface AuthSession {
   providedIn: 'root',
 })
 export class AuthSessionService {
+    isLoggedIn(): boolean {
+      console.log('Sessão:', this.sessionState());
+      const session = this.sessionState();
+      if (!session || session.expiresAt <= Date.now()) {
+        return false;
+      }
+      try {
+        const payloadPart = session.token.split('.')[1];
+        if (!payloadPart) return false;
+        const normalized = payloadPart.replace(/-/g, '+').replace(/_/g, '/');
+        const padded = normalized.padEnd(normalized.length + (4 - (normalized.length % 4 || 4)) % 4, '=');
+        const decodedPayload = atob(padded);
+        const payload = JSON.parse(decodedPayload);
+        // LOG PARA DEPURAÇÃO
+        console.log('[AuthSessionService] JWT payload:', payload);
+        // Bloqueia tokens sem scope ou com scope 'application_token'
+        if (!payload.scope || payload.scope === 'application_token') {
+          return false;
+        }
+        return true;
+      } catch (e) {
+        console.warn('[AuthSessionService] Erro ao decodificar token:', e);
+        return false;
+      }
+    }
   private static readonly STORAGE_KEY = 'auth_session';
   private static readonly TOKEN_FALLBACK_DURATION_MS = 30 * 60 * 1000;
   private static readonly REFRESH_WINDOW_MS = 5 * 60 * 1000;
 
   private readonly authApiService = inject(AuthApiService);
 
-  private readonly sessionState = signal<AuthSession | null>(null);
+  private _sessionState: AuthSession | null = null;
+  private sessionState(): AuthSession | null {
+    return this._sessionState;
+  }
 
   private refreshTimeoutId: ReturnType<typeof setTimeout> | null = null;
   private expirationTimeoutId: ReturnType<typeof setTimeout> | null = null;
@@ -46,31 +75,33 @@ export class AuthSessionService {
       lastActivityAt: now,
     };
 
-    this.sessionState.set(updated);
+    this._sessionState = updated;
     this.persistSession(updated);
   };
 
-  initializeFromStorage(): void {
+  initializeFromStorage(): AuthSession | null {
     if (typeof window === 'undefined') {
-      return;
+      this._sessionState = null;
+      return null;
     }
 
     const rawSession = localStorage.getItem(AuthSessionService.STORAGE_KEY);
     if (!rawSession) {
-      return;
+      this._sessionState = null;
+      return null;
     }
 
     try {
       const parsed = JSON.parse(rawSession) as Partial<AuthSession>;
       if (!parsed.token || !parsed.refreshToken || !parsed.email) {
         this.clearSession();
-        return;
+        return null;
       }
 
       const expiresAt = Number(parsed.expiresAt);
       if (!Number.isFinite(expiresAt) || expiresAt <= Date.now()) {
         this.clearSession();
-        return;
+        return null;
       }
 
       const restored: AuthSession = {
@@ -82,11 +113,13 @@ export class AuthSessionService {
         lastActivityAt: Number(parsed.lastActivityAt) || Date.now(),
       };
 
-      this.sessionState.set(restored);
+      this._sessionState = restored;
       this.registerActivityListeners();
       this.scheduleSessionTimers();
+      return restored;
     } catch {
       this.clearSession();
+      return null;
     }
   }
 
@@ -104,14 +137,14 @@ export class AuthSessionService {
       lastActivityAt: now,
     };
 
-    this.sessionState.set(session);
+    this._sessionState = session;
     this.persistSession(session);
     this.registerActivityListeners();
     this.scheduleSessionTimers();
   }
 
   clearSession(): void {
-    this.sessionState.set(null);
+    this._sessionState = null;
 
     if (typeof window !== 'undefined') {
       localStorage.removeItem(AuthSessionService.STORAGE_KEY);

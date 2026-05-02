@@ -50,8 +50,12 @@ npm run build
 
 O front usa proxy SSR para evitar CORS no navegador.
 
-- API principal: variavel API_TARGET (padrao http://toxic-bet-api:20000)
-- Auth server: variavel AUTH_TARGET (padrao http://ms-auth-server:2300)
+- API principal: variavel API_TARGET (padrao https://api.toxicbet.com.br)
+- Auth server: variavel AUTH_TARGET (padrao https://auth.toxicbet.com.br)
+
+URL de login Google esperada no ambiente AWS:
+
+- https://auth.toxicbet.com.br/auth-server/oauth2/authorization/google
 
 ## Docker
 
@@ -81,4 +85,4 @@ Se ainda nao existir:
 docker network create shared-services
 ```
 
-Depois suba seus back-ends na mesma rede (como nos compose que voce compartilhou) para o front resolver os hosts toxic-bet-api e ms-auth-server.
+Depois suba seus back-ends na mesma rede (se estiver em ambiente local) ou mantenha os targets AWS padrao para uso remoto.

@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { authGuard } from './auth.guard';
 
 import { environment } from '../environments/environment';
 
@@ -17,13 +18,15 @@ export const routes: Routes = [
 		loadChildren: () => import('./register/register.routes').then((m) => m.registerRoutes),
 	},
 	{
-		path: 'match',
-		loadComponent: () => import('./match/match').then((m) => m.Match),
-	},
+  path: 'match',
+  loadComponent: () => import('./match/match').then((m) => m.Match),
+  canActivate: [authGuard],
+  },
 	{
-		path: 'base',
-		loadComponent: () => import('./base/base').then((m) => m.Base),
-	},
+  path: 'base',
+  loadComponent: () => import('./base/base').then((m) => m.Base),
+  canActivate: [authGuard],
+  },
 	{
 		path: '**',
 		redirectTo: entryRoute,

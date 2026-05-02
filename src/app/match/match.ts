@@ -1,11 +1,16 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
-import { Router } from '@angular/router';
 
+
+import { ChangeDetectionStrategy, Component, inject, signal, computed, effect } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
+import { ChampionshipApiService, Championship } from './championship-api.service';
 import { AuthService } from '../register/services/auth.service';
 import { AuthSessionService } from '../register/services/auth-session.service';
 
 @Component({
   selector: 'app-match',
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './match.html',
   styleUrl: './match.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -14,6 +19,42 @@ export class Match {
   private readonly router = inject(Router);
   private readonly authService = inject(AuthService);
   private readonly authSessionService = inject(AuthSessionService);
+
+  private readonly championshipApi = inject(ChampionshipApiService);
+
+  protected readonly championships = signal<Championship[]>([]);
+  protected readonly selectedChampionship = signal<Championship | null>(null);
+  protected readonly isLoadingChampionships = signal(false);
+
+  constructor() {
+    this.loadChampionships();
+  }
+
+  protected loadChampionships(): void {
+    this.isLoadingChampionships.set(true);
+    this.championshipApi.getChampionships().subscribe({
+      next: (data) => {
+        this.championships.set(data);
+        this.isLoadingChampionships.set(false);
+      },
+      error: () => {
+        this.championships.set([]);
+        this.isLoadingChampionships.set(false);
+      },
+    });
+  }
+
+    protected onChampionshipChange(event: Event): void {
+      const select = event.target as HTMLSelectElement;
+      const id = Number(select.value);
+      const champ = this.championships().find((c: Championship) => c.idChampionship === id) || null;
+      if (champ) {
+        this.selectChampionship(champ);
+      }
+    }
+  protected selectChampionship(champ: Championship): void {
+    this.selectedChampionship.set(champ);
+  }
 
   protected readonly isLoggingOut = signal(false);
   protected readonly isPageTransitioning = signal(false);
