@@ -37,9 +37,21 @@ export class MatchApiService {
     );
   }
 
+  streamMatchesByChampionship(championshipId: number): Observable<MatchResponse> {
+    return this.withToken((token) =>
+      this.createSseStream(`${this.baseUrl}/by-championship?championshipId=${championshipId}`, token),
+    );
+  }
+
   streamOpenBettingMatches(): Observable<MatchResponse> {
     return this.withToken((token) =>
       this.createSseStream(`${this.baseUrl}/find-open`, token),
+    );
+  }
+
+  streamOpenBettingMatchesByChampionship(championshipId: number): Observable<MatchResponse> {
+    return this.withToken((token) =>
+      this.createSseStream(`${this.baseUrl}/open/by-championship?championshipId=${championshipId}`, token),
     );
   }
 

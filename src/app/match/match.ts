@@ -52,49 +52,47 @@ export class Match implements OnDestroy {
   }
 
   private loadMatches(): void {
-    this.matchStreamSub = this.matchApi.streamAllMatches().subscribe({
+    this.matchStreamSub?.unsubscribe();
+    this.matches.set([]);
+    const source$ = this.selectedChampionship()
+      ? this.matchApi.streamMatchesByChampionship(this.selectedChampionship()!.idChampionship)
+      : this.matchApi.streamAllMatches();
+
+    this.matchStreamSub = source$.subscribe({
       next: (match) => {
         console.log('[Match] received match from stream:', match);
-        this.matches.update((current) => {
-          const idx = current.findIndex((m) => m.matchId === match.matchId);
-          if (idx >= 0) {
-            const updated = [...current];
-            updated[idx] = match;
-            return updated;
-          }
-          return [...current, match];
-        });
+        this.matches.update((current) => this.upsert(current, match));
       },
-      error: (err) => {
-        console.error('[Match] stream error:', err);
-      },
-      complete: () => {
-        console.log('[Match] stream completed');
-      },
+      error: (err) => console.error('[Match] stream error:', err),
+      complete: () => console.log('[Match] stream completed'),
     });
   }
 
   private loadOpenMatches(): void {
-    this.openMatchStreamSub = this.matchApi.streamOpenBettingMatches().subscribe({
+    this.openMatchStreamSub?.unsubscribe();
+    this.openMatches.set([]);
+    const source$ = this.selectedChampionship()
+      ? this.matchApi.streamOpenBettingMatchesByChampionship(this.selectedChampionship()!.idChampionship)
+      : this.matchApi.streamOpenBettingMatches();
+
+    this.openMatchStreamSub = source$.subscribe({
       next: (match) => {
         console.log('[Match] received open match from stream:', match);
-        this.openMatches.update((current) => {
-          const idx = current.findIndex((m) => m.matchId === match.matchId);
-          if (idx >= 0) {
-            const updated = [...current];
-            updated[idx] = match;
-            return updated;
-          }
-          return [...current, match];
-        });
+        this.openMatches.update((current) => this.upsert(current, match));
       },
-      error: (err) => {
-        console.error('[Match] open stream error:', err);
-      },
-      complete: () => {
-        console.log('[Match] open stream completed');
-      },
+      error: (err) => console.error('[Match] open stream error:', err),
+      complete: () => console.log('[Match] open stream completed'),
     });
+  }
+
+  private upsert(list: MatchResponse[], match: MatchResponse): MatchResponse[] {
+    const idx = list.findIndex((m) => m.matchId === match.matchId);
+    if (idx >= 0) {
+      const updated = [...list];
+      updated[idx] = match;
+      return updated;
+    }
+    return [...list, match];
   }
 
   ngOnDestroy(): void {
@@ -144,6 +142,8 @@ export class Match implements OnDestroy {
     }
   protected selectChampionship(champ: Championship): void {
     this.selectedChampionship.set(champ);
+    this.loadMatches();
+    this.loadOpenMatches();
   }
 
   protected readonly isLoggingOut = signal(false);
