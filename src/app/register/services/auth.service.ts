@@ -25,47 +25,18 @@ export class AuthService {
      * @param response { userName, email, token, refreshToken }
      */
     handleGoogleLoginCallback(response: LoginResponse): void {
-      this.logWithTime('Received Google login callback');
       this.authSessionService.startSession(response);
-      this.logWithTime('Started user session with Google token');
+      // Verifica/registra o usuário em background — navegação é responsabilidade do chamador
       this.toxicBetUserService.existsByEmailWithToken(response.email, response.token).subscribe({
         next: (exists) => {
-          this.logWithTime(`User existsByEmail: ${exists}`);
-          if (exists) {
-            this.routerNavigateMatch();
-          } else {
-            this.logWithTime('User does not exist, registering...');
-            // Chama o registro em background
+          if (!exists) {
             this.toxicBetUserService.registerUserWithToken(response.userName, response.email, response.token).subscribe({
-              next: () => this.logWithTime('User registered successfully'),
-              error: (err) => this.logWithTime('User registration failed', err),
+              error: (err) => console.error('[GoogleLogin] User registration failed', err),
             });
-            this.routerNavigateMatch();
           }
         },
-        error: (err) => this.logWithTime('existsByEmail failed', err),
+        error: (err) => console.error('[GoogleLogin] existsByEmail failed', err),
       });
-    }
-
-    private routerNavigateMatch(): void {
-      if (typeof window !== 'undefined') {
-        setTimeout(() => {
-          window.location.assign('/match');
-        }, 220);
-      }
-    }
-
-    private logWithTime(message: string, error?: any): void {
-      if (typeof window === 'undefined' || (window && !window.console)) {
-        const now = new Date();
-        const brTime = now.toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' });
-        // eslint-disable-next-line no-console
-        console.log(`[${brTime}] [GoogleLogin] ${message}`);
-        if (error) {
-          // eslint-disable-next-line no-console
-          console.error(error);
-        }
-      }
     }
   private readonly authApiService = inject(AuthApiService);
   private readonly authSessionService = inject(AuthSessionService);

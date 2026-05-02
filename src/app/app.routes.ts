@@ -18,6 +18,10 @@ export const routes: Routes = [
 		loadChildren: () => import('./register/register.routes').then((m) => m.registerRoutes),
 	},
 	{
+		path: 'login-callback',
+		loadComponent: () => import('./register/login/login-callback').then((m) => m.LoginCallbackComponent),
+	},
+	{
   path: 'match',
   loadComponent: () => import('./match/match').then((m) => m.Match),
   canActivate: [authGuard],

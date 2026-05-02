@@ -13,34 +13,35 @@ export class LoginCallbackComponent implements OnInit {
   private readonly authService = inject(AuthService);
 
   ngOnInit(): void {
-    this.route.queryParams.subscribe(params => {
-      // Fallback: fluxo de redirect com ?data=...
-      if (params['data']) {
-        try {
-          const json = JSON.parse(decodeURIComponent(params['data']));
-          const finalUserName = json.userName || json.name;
-          if (finalUserName && json.email && json.token && json.refreshToken) {
-            this.processGoogleLogin({ userName: finalUserName, email: json.email, token: json.token, refreshToken: json.refreshToken });
-            return;
-          }
-        } catch (e) {
-          // erro de parse, ignora
+    const params = this.route.snapshot.queryParams;
+
+    // Fluxo de redirect com ?data=JSON (backend envia JSON encodado)
+    if (params['data']) {
+      try {
+        const json = JSON.parse(params['data'] as string);
+        const finalUserName = json.userName || json.name;
+        if (finalUserName && json.email && json.token && json.refreshToken) {
+          this.processGoogleLogin({ userName: finalUserName, email: json.email, token: json.token, refreshToken: json.refreshToken });
+          return;
         }
+      } catch {
+        // JSON inválido, tenta query params diretos abaixo
       }
-      // Fluxo padrão: query params diretos
-      const { userName, email, token, refreshToken, name } = params;
-      const finalUserName = userName || name;
-      if (finalUserName && email && token && refreshToken) {
-        this.processGoogleLogin({ userName: finalUserName, email, token, refreshToken });
-        return;
-      }
-      // Se não conseguiu processar, vai para login
-      this.router.navigate(['/register/login']);
-    });
+    }
+
+    // Fluxo com query params diretos
+    const { userName, name, email, token, refreshToken } = params;
+    const finalUserName = userName || name;
+    if (finalUserName && email && token && refreshToken) {
+      this.processGoogleLogin({ userName: finalUserName, email, token, refreshToken });
+      return;
+    }
+
+    // Nenhum dado encontrado — volta para login
+    this.router.navigate(['/register/login']);
   }
 
   private processGoogleLogin(response: { userName: string, email: string, token: string, refreshToken: string }): void {
-    // Inicia sessão e registro em background, redireciona imediatamente
     this.authService.handleGoogleLoginCallback(response);
     this.router.navigate(['/match']);
   }

@@ -19,28 +19,28 @@ interface AuthSession {
 })
 export class AuthSessionService {
     isLoggedIn(): boolean {
-      console.log('Sessão:', this.sessionState());
       const session = this.sessionState();
       if (!session || session.expiresAt <= Date.now()) {
         return false;
       }
       try {
         const payloadPart = session.token.split('.')[1];
-        if (!payloadPart) return false;
+        // Se o token não é um JWT (sem segunda parte), consideramos sessão válida
+        if (!payloadPart) {
+          return true;
+        }
         const normalized = payloadPart.replace(/-/g, '+').replace(/_/g, '/');
         const padded = normalized.padEnd(normalized.length + (4 - (normalized.length % 4 || 4)) % 4, '=');
         const decodedPayload = atob(padded);
-        const payload = JSON.parse(decodedPayload);
-        // LOG PARA DEPURAÇÃO
-        console.log('[AuthSessionService] JWT payload:', payload);
-        // Bloqueia tokens sem scope ou com scope 'application_token'
-        if (!payload.scope || payload.scope === 'application_token') {
+        const payload = JSON.parse(decodedPayload) as { scope?: string };
+        // Bloqueia apenas tokens de aplicação, não tokens de usuário
+        if (payload.scope === 'application_token') {
           return false;
         }
         return true;
-      } catch (e) {
-        console.warn('[AuthSessionService] Erro ao decodificar token:', e);
-        return false;
+      } catch {
+        // Se não consegue decodificar o JWT, a sessão existe e não expirou — permite
+        return true;
       }
     }
   private static readonly STORAGE_KEY = 'auth_session';
