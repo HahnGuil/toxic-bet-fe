@@ -17,6 +17,6 @@ export class App {
 
   constructor() {
     this.authSessionService.initializeFromStorage();
-    // this.applicationTokenService.initialize(); // Desabilitado temporariamente para teste
+    this.applicationTokenService.initialize(); // Desabilitado temporariamente para teste
   }
 }
