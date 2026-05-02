@@ -15,15 +15,15 @@
     </div>
 
     <div class="odds-row">
-      <div class="odds-rect">
+      <button type="button" class="odds-rect" [class.odds-rect--selected]="selectedOdd() === 'home'" (click)="toggleOdd('home')">
         <span class="odds-value">{{ formatOdds(match().homeTeamOdds) }}</span>
-      </div>
-      <div class="odds-rect">
+      </button>
+      <button type="button" class="odds-rect" [class.odds-rect--selected]="selectedOdd() === 'draw'" (click)="toggleOdd('draw')">
         <span class="odds-value">{{ formatOdds(match().drawTeamOdds) }}</span>
-      </div>
-      <div class="odds-rect">
+      </button>
+      <button type="button" class="odds-rect" [class.odds-rect--selected]="selectedOdd() === 'visiting'" (click)="toggleOdd('visiting')">
         <span class="odds-value">{{ formatOdds(match().visitingTeamOdds) }}</span>
-      </div>
+      </button>
     </div>
 
     <div class="odds-labels">
@@ -36,7 +36,7 @@
   <footer class="card-footer">
     <span class="match-time">{{ match().matchTime }}</span>
     @if (match().result === 'OPEN_FOR_BETTING') {
-      <button type="button" class="place-bet-btn">PLACE BET</button>
+      <button type="button" class="place-bet-btn" [class.place-bet-btn--active]="selectedOdd() !== null" (click)="placeBet()">PLACE BET</button>
     } @else {
       <span class="match-result" [class]="resultClass(match().result)">
         {{ resultLabel(match().result) }}
@@ -44,3 +44,9 @@
     }
   </footer>
 </article>
+
+@if (showBetError()) {
+  <div class="bet-error-banner" role="alert" (click)="dismissError()">
+    You need to select a odd to place a bet
+  </div>
+}

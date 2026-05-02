@@ -16,7 +16,7 @@
 .card-header {
   background: #115e59;
   color: #fff;
-  padding: 0.45rem 1rem;
+  padding: 0.47rem 1rem;
   text-align: center;
 }
 
@@ -29,7 +29,7 @@
 
 /* ── Body ── */
 .card-body {
-  padding: 0.75rem 1rem 0.6rem;
+  padding: 0.79rem 1rem 0.63rem;
   display: flex;
   flex-direction: column;
   gap: 0.45rem;
@@ -51,7 +51,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 2.8rem;
+  min-height: 2.94rem;
   text-align: center;
 }
 
@@ -77,16 +77,27 @@
 }
 
 .odds-rect {
-  background: #115e59;
+  background: #fff;
+  border: 1.5px solid #115e59;
   border-radius: 0.35rem;
   padding: 0.35rem 0.25rem;
   text-align: center;
+  cursor: pointer;
+  transition: background 140ms ease, border-color 140ms ease;
 }
 
-.odds-value {
-  color: #fff;
+.odds-rect .odds-value {
+  color: #115e59;
   font-size: 0.95rem;
   font-weight: 700;
+}
+
+.odds-rect--selected {
+  background: #115e59;
+}
+
+.odds-rect--selected .odds-value {
+  color: #fff;
 }
 
 /* Odds labels */
@@ -108,7 +119,7 @@
 .card-footer {
   background: #f8fafc;
   border-top: 1px solid #e2e8f0;
-  padding: 0.4rem 1rem;
+  padding: 0.42rem 1rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -156,23 +167,48 @@
 }
 
 .place-bet-btn {
-  background: #115e59;
-  color: #fff;
+  background: #cbd5e1;
+  color: #94a3b8;
   border: none;
   border-radius: 0.35rem;
   padding: 0.28rem 0.75rem;
   font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.06em;
-  cursor: pointer;
+  cursor: default;
   white-space: nowrap;
-  transition: background 140ms ease;
+  transition: background 140ms ease, color 140ms ease;
 }
 
-.place-bet-btn:hover {
+.place-bet-btn--active {
+  background: #115e59;
+  color: #fff;
+  cursor: pointer;
+}
+
+.place-bet-btn--active:hover {
   background: #0f4f4a;
 }
 
-.place-bet-btn:active {
+.place-bet-btn--active:active {
   background: #0a3d39;
+}
+
+.bet-error-banner {
+  margin-top: 0.5rem;
+  background: #dc2626;
+  color: #fff;
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 0.6rem 1rem;
+  border-radius: 0.5rem;
+  text-align: center;
+  cursor: pointer;
+  user-select: none;
+  animation: error-fade-in 180ms ease both;
+}
+
+@keyframes error-fade-in {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
 }

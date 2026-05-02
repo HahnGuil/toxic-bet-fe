@@ -1,6 +1,8 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, signal } from '@angular/core';
 
 import { MatchResponse, MatchResult } from '../match-api.service';
+
+type OddType = 'home' | 'draw' | 'visiting';
 
 const RESULT_LABELS: Record<MatchResult, string> = {
   HOME_WIN: 'HOME WIN',
@@ -30,6 +32,23 @@ const RESULT_CLASSES: Record<MatchResult, string> = {
 })
 export class MatchCard {
   readonly match = input.required<MatchResponse>();
+
+  protected readonly selectedOdd = signal<OddType | null>(null);
+  protected readonly showBetError = signal(false);
+
+  protected toggleOdd(odd: OddType): void {
+    this.selectedOdd.set(this.selectedOdd() === odd ? null : odd);
+  }
+
+  protected placeBet(): void {
+    if (this.selectedOdd() === null) {
+      this.showBetError.set(true);
+    }
+  }
+
+  protected dismissError(): void {
+    this.showBetError.set(false);
+  }
 
   protected resultLabel(result: MatchResult): string {
     return RESULT_LABELS[result] ?? result;
