@@ -45,7 +45,15 @@ export class Match implements OnDestroy {
     this.matchStreamSub = this.matchApi.streamAllMatches().subscribe({
       next: (match) => {
         console.log('[Match] received match from stream:', match);
-        this.matches.update((current) => [...current, match]);
+        this.matches.update((current) => {
+          const idx = current.findIndex((m) => m.matchId === match.matchId);
+          if (idx >= 0) {
+            const updated = [...current];
+            updated[idx] = match;
+            return updated;
+          }
+          return [...current, match];
+        });
       },
       error: (err) => {
         console.error('[Match] stream error:', err);
@@ -60,7 +68,15 @@ export class Match implements OnDestroy {
     this.openMatchStreamSub = this.matchApi.streamOpenBettingMatches().subscribe({
       next: (match) => {
         console.log('[Match] received open match from stream:', match);
-        this.openMatches.update((current) => [...current, match]);
+        this.openMatches.update((current) => {
+          const idx = current.findIndex((m) => m.matchId === match.matchId);
+          if (idx >= 0) {
+            const updated = [...current];
+            updated[idx] = match;
+            return updated;
+          }
+          return [...current, match];
+        });
       },
       error: (err) => {
         console.error('[Match] open stream error:', err);
