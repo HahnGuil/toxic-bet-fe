@@ -48,6 +48,15 @@
   gap: 0.75rem;
 }
 
+.match-section-title {
+  text-align: center;
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: #115e59;
+  margin: 0;
+}
+
 .match-view-switcher {
   width: min(100%, 24rem);
   display: grid;

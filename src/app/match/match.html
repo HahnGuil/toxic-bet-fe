@@ -11,6 +11,7 @@
           [value]="selectedChampionshipValue()"
           (valueChange)="onChampionshipChange($event)"
         />
+        <h2 class="match-section-title">PARTIDAS</h2>
         <div class="match-view-switcher" aria-label="Selecionar visualizacao de partidas" role="tablist">
           <button
             type="button"
@@ -19,7 +20,7 @@
             [attr.aria-selected]="selectedMatchView() === 'all'"
             (click)="selectMatchView('all')"
           >
-            TODAS AS PARTIDAS
+            TODAS
           </button>
 
           <button
@@ -29,7 +30,7 @@
             [attr.aria-selected]="selectedMatchView() === 'open'"
             (click)="selectMatchView('open')"
           >
-            ABERTAS PARA APOSTA
+            ABERTAS
           </button>
         </div>
       </section>
