@@ -1,0 +1,99 @@
+<article class="pool-card">
+
+  <!-- Name row -->
+  <div class="pool-card-name">
+    <span class="pool-card-pool-name">{{ pool().bettingPoolName }}</span>
+    <div class="pool-card-name-actions">
+      <span class="pool-card-key">{{ pool().bettingPoolKey }}</span>
+      <button type="button" class="pool-icon-btn" aria-label="Copiar chave" title="Copiar chave" (click)="copyKey()">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path fill="currentColor" d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
+        </svg>
+      </button>
+      <button type="button" class="pool-icon-btn" aria-label="Compartilhar bolão" title="Compartilhar" (click)="openShare()">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path fill="currentColor" d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/>
+        </svg>
+      </button>
+      @if (expanded()) {
+        <button type="button" class="pool-icon-btn" aria-label="Fechar" title="Fechar" (click)="collapse()">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path fill="currentColor" d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+          </svg>
+        </button>
+      }
+    </div>
+  </div>
+
+  <!-- Classification header -->
+  <header class="pool-card-header">
+    <span class="pool-card-title">Classificação</span>
+  </header>
+
+  <!-- Table -->
+  <div class="pool-card-body">
+    @if (pool().users.length > 0) {
+      <div class="pool-table-row pool-table-head" aria-hidden="true">
+        <span class="pool-col-rank">#</span>
+        <span class="pool-col-participant">Participante</span>
+        <span class="pool-col-points">Pontos</span>
+      </div>
+
+      @for (user of visibleUsers(); track user.userName; let i = $index) {
+        <div class="pool-table-row" [class.pool-table-row--highlight]="i === 0">
+          <span class="pool-col-rank">{{ i + 1 }}</span>
+          <span class="pool-col-participant">{{ user.userName }}</span>
+          <span class="pool-col-points">{{ user.points }}</span>
+        </div>
+      }
+
+      @if (hasMore() && !expanded()) {
+        <button type="button" class="pool-expand-btn" (click)="expanded.set(true)">
+          + {{ hiddenCount() }} mais
+        </button>
+      }
+    } @else {
+      <p class="pool-table-empty">Nenhum participante ainda.</p>
+    }
+  </div>
+
+</article>
+
+@if (shareModalOpen()) {
+  <div class="share-overlay" (click)="closeShare()" role="dialog" aria-modal="true" aria-label="Compartilhar bolão">
+    <div class="share-dialog" (click)="$event.stopPropagation()">
+
+      <div class="share-dialog-header">
+        <span class="share-dialog-title">Compartilhar Bolão</span>
+        <button type="button" class="pool-icon-btn" aria-label="Fechar" title="Fechar" (click)="closeShare()">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path fill="currentColor" d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="share-link-row">
+        <span class="share-link-url">{{ shareLink() }}</span>
+        <button
+          type="button"
+          class="pool-icon-btn share-copy-btn"
+          [class.share-copy-btn--copied]="linkCopied()"
+          aria-label="Copiar link"
+          (click)="copyLink()"
+        >
+          @if (linkCopied()) {
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path fill="currentColor" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+            </svg>
+            <span class="share-copied-label">Copiado</span>
+          } @else {
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path fill="currentColor" d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
+            </svg>
+          }
+        </button>
+      </div>
+
+    </div>
+  </div>
+}

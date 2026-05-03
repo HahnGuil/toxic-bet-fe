@@ -2,29 +2,25 @@
 
 import { ChangeDetectionStrategy, Component, inject, signal, computed, effect, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { ChampionshipApiService, Championship } from './championship-api.service';
 import { MatchApiService, MatchResponse } from './match-api.service';
 import { BetApiService } from './bet-api.service';
 import { MatchCard } from './match-card/match-card';
 import { LoggerService } from '../logger.service';
-import { AuthService } from '../register/services/auth.service';
-import { AuthSessionService } from '../register/services/auth-session.service';
+import { AppFooter } from '../shared/footer/footer';
+import { AppHeader } from '../shared/header/header';
+import { AppDropdown, DropdownOption } from '../shared/dropdown/dropdown';
 
 @Component({
   selector: 'app-match',
   standalone: true,
-  imports: [CommonModule, MatchCard],
+  imports: [CommonModule, MatchCard, AppFooter, AppHeader, AppDropdown],
   templateUrl: './match.html',
   styleUrl: './match.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Match implements OnDestroy {
-  private readonly router = inject(Router);
-  private readonly authService = inject(AuthService);
-  private readonly authSessionService = inject(AuthSessionService);
-
   private readonly championshipApi = inject(ChampionshipApiService);
   private readonly matchApi = inject(MatchApiService);
   private readonly betApi = inject(BetApiService);
@@ -33,6 +29,13 @@ export class Match implements OnDestroy {
   protected readonly championships = signal<Championship[]>([]);
   protected readonly selectedChampionship = signal<Championship | null>(null);
   protected readonly isLoadingChampionships = signal(false);
+
+  protected readonly championshipOptions = computed(() =>
+    this.championships().map((c) => ({ value: String(c.idChampionship), label: c.name }))
+  );
+  protected readonly selectedChampionshipValue = computed(() =>
+    this.selectedChampionship() ? String(this.selectedChampionship()!.idChampionship) : ''
+  );
   protected readonly matches = signal<MatchResponse[]>([]);
   protected readonly openMatches = signal<MatchResponse[]>([]);
   protected readonly bettedMatchIds = signal<Set<number>>(new Set());
@@ -146,9 +149,8 @@ export class Match implements OnDestroy {
     });
   }
 
-    protected onChampionshipChange(event: Event): void {
-      const select = event.target as HTMLSelectElement;
-      const id = Number(select.value);
+    protected onChampionshipChange(value: string): void {
+      const id = Number(value);
       const champ = this.championships().find((c: Championship) => c.idChampionship === id) || null;
       if (champ) {
         this.selectChampionship(champ);
@@ -160,40 +162,10 @@ export class Match implements OnDestroy {
     this.loadOpenMatches();
   }
 
-  protected readonly isLoggingOut = signal(false);
   protected readonly isPageTransitioning = signal(false);
   protected readonly selectedMatchView = signal<'all' | 'open'>('all');
 
   protected selectMatchView(view: 'all' | 'open'): void {
     this.selectedMatchView.set(view);
-  }
-
-  protected logoff(): void {
-    if (this.isLoggingOut()) {
-      return;
-    }
-
-    const email = this.authSessionService.getSessionEmail();
-    if (!email) {
-      this.authSessionService.clearSession();
-      this.router.navigate(['/register/login']);
-      return;
-    }
-
-    this.isLoggingOut.set(true);
-
-    this.authService.logout(email).subscribe({
-      next: async () => {
-        this.authSessionService.clearSession();
-        this.isPageTransitioning.set(true);
-
-        setTimeout(async () => {
-          await this.router.navigate(['/register/login']);
-        }, 220);
-      },
-      error: () => {
-        this.isLoggingOut.set(false);
-      },
-    });
   }
 }

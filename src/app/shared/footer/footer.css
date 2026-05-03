@@ -1,0 +1,55 @@
+:host {
+  display: block;
+}
+
+.app-footer {
+  background: #115e59;
+  height: 100%;
+}
+
+.footer-nav {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr;
+  height: 100%;
+  align-items: stretch;
+}
+
+.footer-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  color: #fff;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.4rem 0.5rem;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  transition: background-color 140ms ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.footer-nav-item svg {
+  width: 1.5rem;
+  height: 1.5rem;
+  flex-shrink: 0;
+}
+
+.footer-nav-item:hover {
+  background: rgb(255 255 255 / 0.1);
+}
+
+.footer-nav-item:active {
+  background: rgb(255 255 255 / 0.18);
+}
+
+.footer-divider {
+  width: 1px;
+  background: rgb(255 255 255 / 0.25);
+  align-self: stretch;
+  margin: 0.75rem 0;
+}

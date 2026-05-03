@@ -27,9 +27,9 @@
     </div>
 
     <div class="odds-labels">
-      <span>HOME</span>
-      <span>DRAW</span>
-      <span>VISITING</span>
+      <span>CASA</span>
+      <span>EMPATE</span>
+      <span>VISITANTE</span>
     </div>
   </div>
 
@@ -55,7 +55,7 @@
 
 @if (showSelectOddError()) {
   <div class="bet-banner bet-banner--error" role="alert" (click)="dismissSelectOddError()">
-    You need to select an odd to place a bet
+    Você precisa selecionar uma odd para apostar.
   </div>
 }
 
@@ -67,7 +67,7 @@
 
 @if (showSuccess()) {
   <div class="bet-banner bet-banner--success" role="status" (click)="dismissSuccess()">
-    Bet placed successfully!
+    Aposta realizada com sucesso!
   </div>
 }
 
@@ -75,16 +75,16 @@
   <div class="odds-popup-overlay" role="dialog" aria-modal="true" aria-label="Odds changed">
     <div class="odds-popup">
       <p class="odds-popup-message">
-        The odds for this match have changed to
+        As odds para esta partida mudaram para
         <strong>{{ formatOdds(updatedOddsValue()) }}</strong>.
-        Do you want to confirm your bet with the updated odds?
+        Deseja confirmar sua aposta com as odds atualizadas?
       </p>
       <div class="odds-popup-actions">
         <button type="button" class="odds-popup-btn odds-popup-btn--confirm" (click)="confirmBet()">
-          CONFIRM BET
+          CONFIRMAR APOSTA
         </button>
         <button type="button" class="odds-popup-btn odds-popup-btn--cancel" (click)="cancelBet()">
-          CANCEL
+          CANCELAR
         </button>
       </div>
     </div>

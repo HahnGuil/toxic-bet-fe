@@ -32,6 +32,11 @@ export const routes: Routes = [
   canActivate: [authGuard],
   },
 	{
+  path: 'betting-pool',
+  loadComponent: () => import('./betting-pool/betting-pool').then((m) => m.BettingPool),
+  canActivate: [authGuard],
+  },
+	{
 		path: '**',
 		redirectTo: entryRoute,
 	},

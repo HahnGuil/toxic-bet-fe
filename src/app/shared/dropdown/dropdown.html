@@ -1,0 +1,13 @@
+<div class="app-dropdown-wrap">
+  <select
+    class="app-dropdown"
+    [id]="id()"
+    [ngClass]="{ 'app-dropdown-selected': hasValue() }"
+    (change)="onChange($event)"
+  >
+    <option value="" [selected]="!hasValue()" hidden>{{ placeholder() }}</option>
+    @for (opt of options(); track opt.value) {
+      <option [value]="opt.value" [selected]="value() === opt.value">{{ opt.label }}</option>
+    }
+  </select>
+</div>

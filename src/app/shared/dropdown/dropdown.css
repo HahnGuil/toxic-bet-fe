@@ -1,0 +1,45 @@
+:host {
+  display: block;
+  width: min(100%, 24rem);
+  margin: 0 auto;
+}
+
+.app-dropdown-wrap {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-dropdown {
+  width: 100%;
+  min-height: 2.5rem;
+  border-radius: 0.5rem;
+  border: 1.5px solid #115e59;
+  background: #fff;
+  color: #115e59;
+  font-size: 1.05rem;
+  font-weight: 490;
+  padding: 0.45rem 0.9rem;
+  transition: background 140ms, color 140ms;
+  outline: none;
+  cursor: pointer;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.app-dropdown:focus-visible {
+  outline: 2px solid #0f172a;
+  outline-offset: 2px;
+}
+
+.app-dropdown-selected {
+  background: rgba(17, 94, 89, 0.85) !important;
+  color: #fff !important;
+}
+
+.app-dropdown option {
+  font-weight: 490;
+  text-align: center;
+}
