@@ -8,6 +8,7 @@ import { ChampionshipApiService, Championship } from './championship-api.service
 import { MatchApiService, MatchResponse } from './match-api.service';
 import { BetApiService } from './bet-api.service';
 import { MatchCard } from './match-card/match-card';
+import { LoggerService } from '../logger.service';
 import { AuthService } from '../register/services/auth.service';
 import { AuthSessionService } from '../register/services/auth-session.service';
 
@@ -27,6 +28,7 @@ export class Match implements OnDestroy {
   private readonly championshipApi = inject(ChampionshipApiService);
   private readonly matchApi = inject(MatchApiService);
   private readonly betApi = inject(BetApiService);
+  private readonly logger = inject(LoggerService);
 
   protected readonly championships = signal<Championship[]>([]);
   protected readonly selectedChampionship = signal<Championship | null>(null);
@@ -60,11 +62,15 @@ export class Match implements OnDestroy {
 
     this.matchStreamSub = source$.subscribe({
       next: (match) => {
-        console.log('[Match] received match from stream:', match);
+        const isUpdate = this.matches().some((m) => m.matchId === match.matchId);
+        this.logger.info(
+          isUpdate ? '[Stream:AllMatches] match updated' : '[Stream:AllMatches] match received',
+          { matchId: match.matchId, championship: match.championshipName, result: match.result },
+        );
         this.matches.update((current) => this.upsert(current, match));
       },
-      error: (err) => console.error('[Match] stream error:', err),
-      complete: () => console.log('[Match] stream completed'),
+      error: (err) => this.logger.error('[Stream:AllMatches] error', { message: String(err) }),
+      complete: () => this.logger.info('[Stream:AllMatches] stream completed'),
     });
   }
 
@@ -77,11 +83,15 @@ export class Match implements OnDestroy {
 
     this.openMatchStreamSub = source$.subscribe({
       next: (match) => {
-        console.log('[Match] received open match from stream:', match);
+        const isUpdate = this.openMatches().some((m) => m.matchId === match.matchId);
+        this.logger.info(
+          isUpdate ? '[Stream:OpenMatches] match updated' : '[Stream:OpenMatches] match received',
+          { matchId: match.matchId, championship: match.championshipName, result: match.result },
+        );
         this.openMatches.update((current) => this.upsert(current, match));
       },
-      error: (err) => console.error('[Match] open stream error:', err),
-      complete: () => console.log('[Match] open stream completed'),
+      error: (err) => this.logger.error('[Stream:OpenMatches] error', { message: String(err) }),
+      complete: () => this.logger.info('[Stream:OpenMatches] stream completed'),
     });
   }
 
@@ -105,17 +115,21 @@ export class Match implements OnDestroy {
     this.userBetsSub = this.betApi.streamUserBets().subscribe({
       next: (bet) => {
         if (bet.matchId != null) {
+          this.logger.info('[Stream:UserBets] bet received', { matchId: bet.matchId, result: bet.result, odds: bet.odds });
           this.bettedMatchIds.update((current) => new Set([...current, bet.matchId!]));
         }
       },
-      error: (err) => {
-        console.error('[Match] user bets stream error:', err);
-      },
+      error: (err) => this.logger.error('[Stream:UserBets] error', { message: String(err) }),
     });
   }
 
   protected onBetPlaced(matchId: number): void {
+    const wasInOpenList = this.filteredOpenMatches().some((m) => m.matchId === matchId);
     this.bettedMatchIds.update((current) => new Set([...current, matchId]));
+    this.logger.info('[Bet] bet placed by user', {
+      matchId,
+      removedFromOpenToBet: wasInOpenList,
+    });
   }
 
   protected loadChampionships(): void {

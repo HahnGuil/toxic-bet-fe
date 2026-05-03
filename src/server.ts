@@ -15,6 +15,27 @@ const authTarget = process.env['AUTH_TARGET'] || 'http://ms-auth-server:2300';
 const app = express();
 const angularApp = new AngularNodeAppEngine();
 
+app.use(express.json());
+
+/**
+ * Terminal logging endpoint — receives structured log entries from the Angular client.
+ */
+app.post('/log', (req, res) => {
+  const { level = 'info', message, data } = req.body as {
+    level?: string;
+    message?: string;
+    data?: unknown;
+  };
+  const ts = new Date().toISOString();
+  const prefix = `[${ts}] [${level.toUpperCase()}]`;
+  if (data !== undefined) {
+    console.log(prefix, message, JSON.stringify(data));
+  } else {
+    console.log(prefix, message);
+  }
+  res.status(204).end();
+});
+
 app.use(
   '/api',
   createProxyMiddleware({
