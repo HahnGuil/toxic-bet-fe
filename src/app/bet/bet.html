@@ -5,7 +5,31 @@
     <div class="bet-body">
       <section class="bet-content" aria-label="Conteudo principal">
         <h2 class="bet-section-title">APOSTAS</h2>
-        <p class="bet-empty-state">Nenhuma aposta encontrada.</p>
+        <div class="bet-view-switcher" aria-label="Selecionar visualizacao de apostas" role="tablist">
+          <button
+            type="button"
+            class="bet-view-option bet-view-option-left"
+            [class.bet-view-option-active]="selectedBetView() === 'all'"
+            [attr.aria-selected]="selectedBetView() === 'all'"
+            (click)="selectBetView('all')"
+          >
+            ABERTAS
+          </button>
+
+          <button
+            type="button"
+            class="bet-view-option bet-view-option-right"
+            [class.bet-view-option-active]="selectedBetView() === 'open'"
+            [attr.aria-selected]="selectedBetView() === 'open'"
+            (click)="selectBetView('open')"
+          >
+            CONCLUIDAS
+          </button>
+        </div>
+      </section>
+
+      <section class="bet-list" aria-label="Lista de apostas">
+        <p class="bet-list-empty">Nenhuma aposta encontrada.</p>
       </section>
     </div>
 

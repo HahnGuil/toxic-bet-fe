@@ -61,7 +61,79 @@
   margin: 0;
 }
 
-.bet-empty-state {
+.bet-view-switcher {
+  width: min(100%, 24rem);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-self: start;
+}
+
+.bet-view-option {
+  min-height: 2.5rem;
+  padding: 0.45rem 0.45rem;
+  border: 1px solid #115e59;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  color: #115e59;
+  font-size: 1.02rem;
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 140ms ease, color 140ms ease;
+}
+
+.bet-view-option-left {
+  border-radius: 0.5rem 0 0 0.5rem;
+}
+
+.bet-view-option-right {
+  border-left-width: 0;
+  border-radius: 0 0.5rem 0.5rem 0;
+}
+
+.bet-view-option-active {
+  background: #115e59;
+  color: #fff;
+}
+
+.bet-view-option:focus-visible {
+  position: relative;
+  z-index: 1;
+  outline: 2px solid #0f172a;
+  outline-offset: 2px;
+}
+
+@media (max-width: 640px) {
+  .bet-content {
+    padding-top: 15px;
+  }
+
+  .bet-view-switcher {
+    width: 100%;
+  }
+
+  .bet-view-option {
+    min-height: 2.8rem;
+    font-size: 0.95rem;
+    padding: 0.4rem 0.5rem;
+  }
+}
+
+.bet-list {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 0.5rem 7.5%;
+  overflow-y: auto;
+  min-height: 0;
+}
+
+.bet-list-empty {
   text-align: center;
   color: #64748b;
   font-size: 0.95rem;

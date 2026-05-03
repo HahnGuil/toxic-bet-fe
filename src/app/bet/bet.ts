@@ -13,4 +13,9 @@ import { AppHeader } from '../shared/header/header';
 })
 export class Bet {
   protected readonly isPageTransitioning = signal(false);
+  protected readonly selectedBetView = signal<'all' | 'open'>('all');
+
+  protected selectBetView(view: 'all' | 'open'): void {
+    this.selectedBetView.set(view);
+  }
 }
