@@ -29,7 +29,13 @@
       </section>
 
       <section class="bet-list" aria-label="Lista de apostas">
-        <p class="bet-list-empty">Nenhuma aposta encontrada.</p>
+        @if (selectedBetView() === 'open') {
+          @for (bet of betResults(); track bet.homeTeamName + bet.visitingTeamName) {
+            <app-bet-card [bet]="bet" />
+          } @empty {
+            <p class="bet-list-empty">Nenhuma aposta encontrada.</p>
+          }
+        }
       </section>
     </div>
 

@@ -1,0 +1,35 @@
+<article class="bet-card">
+  <div class="card-body">
+    <div class="teams-row">
+      <div class="team-box">
+        <span class="team-name">{{ bet().homeTeamName }}</span>
+      </div>
+      <span class="teams-separator" aria-hidden="true">X</span>
+      <div class="team-box">
+        <span class="team-name">{{ bet().visitingTeamName }}</span>
+      </div>
+    </div>
+
+    <div class="odds-row">
+      <span class="odds-label">ODD DA APOSTA</span>
+      <span class="odds-value">{{ bet().betOdds }}</span>
+    </div>
+
+    <div
+      class="result-row"
+      [class.result-row--winner]="bet().winner"
+      [class.result-row--loser]="!bet().winner"
+      aria-label="Resultado da partida versus resultado apostado"
+    >
+      <div class="result-item">
+        <span class="result-label">PARTIDA</span>
+        <span class="result-value">{{ resultLabel(bet().matchResult) }}</span>
+      </div>
+      <span class="result-separator" aria-hidden="true">X</span>
+      <div class="result-item">
+        <span class="result-label">APOSTA</span>
+        <span class="result-value">{{ resultLabel(bet().betResult) }}</span>
+      </div>
+    </div>
+  </div>
+</article>
