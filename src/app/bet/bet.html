@@ -1,0 +1,14 @@
+<main class="bet-page" [class.page-fade-out]="isPageTransitioning()">
+  <section class="bet-shell" aria-label="Tela de apostas">
+    <app-header (startFadeOut)="isPageTransitioning.set(true)" />
+
+    <div class="bet-body">
+      <section class="bet-content" aria-label="Conteudo principal">
+        <h2 class="bet-section-title">APOSTAS</h2>
+        <p class="bet-empty-state">Nenhuma aposta encontrada.</p>
+      </section>
+    </div>
+
+    <app-footer />
+  </section>
+</main>

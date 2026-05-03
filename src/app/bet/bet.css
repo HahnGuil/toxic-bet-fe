@@ -1,0 +1,69 @@
+:host {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.bet-page {
+  height: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: block;
+  padding: 0;
+  box-sizing: border-box;
+  overflow: hidden;
+  opacity: 1;
+  transition: opacity 220ms ease;
+  animation: bet-fade-in 260ms ease both;
+  background: radial-gradient(circle at top left, #0ea5a1 0%, #0f172a 55%, #020617 100%);
+}
+
+.bet-page.page-fade-out {
+  opacity: 0;
+}
+
+@keyframes bet-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.bet-shell {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-rows: 4.9rem 1fr 6rem;
+  box-sizing: border-box;
+  overflow: hidden;
+  background: rgb(255 255 255 / 0.96);
+}
+
+.bet-body {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.bet-content {
+  flex-shrink: 0;
+  padding: 15px 1.5rem 1.5rem;
+  display: grid;
+  align-content: start;
+  gap: 0.75rem;
+}
+
+.bet-section-title {
+  text-align: center;
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: #115e59;
+  margin: 0;
+}
+
+.bet-empty-state {
+  text-align: center;
+  color: #64748b;
+  font-size: 0.95rem;
+  margin: 2rem 0 0;
+}
