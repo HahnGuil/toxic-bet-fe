@@ -1,0 +1,71 @@
+<article class="match-card" [class.match-card--error]="invalid()">
+  <header class="card-header">
+    <span class="championship-name">{{ match().championshipName }}</span>
+    <label class="card-checkbox-label" [attr.aria-label]="'Selecionar partida ' + match().homeTeamName + ' x ' + match().visitingTeamName">
+      <input
+        type="checkbox"
+        class="card-checkbox"
+        [checked]="checked()"
+        (change)="onCheckboxChange($event)"
+      />
+      <span class="card-checkbox-custom"></span>
+    </label>
+  </header>
+
+  <div class="card-body">
+    <div class="teams-row">
+      <div class="team-box">
+        <span class="team-name">{{ match().homeTeamName }}</span>
+      </div>
+      <span class="teams-separator" aria-hidden="true">X</span>
+      <div class="team-box">
+        <span class="team-name">{{ match().visitingTeamName }}</span>
+      </div>
+    </div>
+
+    <div class="result-radio-group" role="radiogroup" [attr.aria-label]="'Resultado da partida ' + match().homeTeamName + ' x ' + match().visitingTeamName">
+      <label class="result-radio-label" [class.result-radio-label--selected]="selectedResult() === 'HOME_WIN'">
+        <input
+          type="radio"
+          class="result-radio"
+          [name]="'result-' + match().matchId"
+          value="HOME_WIN"
+          [checked]="selectedResult() === 'HOME_WIN'"
+          (change)="onResultChange('HOME_WIN')"
+        />
+        <span class="result-radio-custom"></span>
+        <span class="result-radio-text">MANDANTE</span>
+      </label>
+
+      <label class="result-radio-label" [class.result-radio-label--selected]="selectedResult() === 'DRAW'">
+        <input
+          type="radio"
+          class="result-radio"
+          [name]="'result-' + match().matchId"
+          value="DRAW"
+          [checked]="selectedResult() === 'DRAW'"
+          (change)="onResultChange('DRAW')"
+        />
+        <span class="result-radio-custom"></span>
+        <span class="result-radio-text">EMPATE</span>
+      </label>
+
+      <label class="result-radio-label" [class.result-radio-label--selected]="selectedResult() === 'VISITING_WIN'">
+        <input
+          type="radio"
+          class="result-radio"
+          [name]="'result-' + match().matchId"
+          value="VISITING_WIN"
+          [checked]="selectedResult() === 'VISITING_WIN'"
+          (change)="onResultChange('VISITING_WIN')"
+        />
+        <span class="result-radio-custom"></span>
+        <span class="result-radio-text">VISITANTE</span>
+      </label>
+    </div>
+
+    @if (invalid()) {
+      <p class="result-error-msg" role="alert">É preciso informar um resultado</p>
+    }
+  </div>
+</article>

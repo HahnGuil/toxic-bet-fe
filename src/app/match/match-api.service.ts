@@ -1,9 +1,18 @@
 import { Injectable, inject } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { filter, switchMap, take } from 'rxjs/operators';
 
 import { environment } from '../../environments/environment';
 import { ApplicationTokenService } from '../register/services/application-token.service';
+import { AuthSessionService } from '../register/services/auth-session.service';
+
+export type CloseMatchResult = 'HOME_WIN' | 'DRAW' | 'VISITING_WIN';
+
+export interface CloseMatchRequest {
+  matchId: number;
+  result: CloseMatchResult;
+}
 
 export type MatchResult =
   | 'HOME_WIN'
@@ -30,6 +39,8 @@ export interface MatchResponse {
 export class MatchApiService {
   private readonly baseUrl = `${environment.toxicBetApiBaseUrl}/match`;
   private readonly applicationTokenService = inject(ApplicationTokenService);
+  private readonly authSessionService = inject(AuthSessionService);
+  private readonly http = inject(HttpClient);
 
   streamAllMatches(): Observable<MatchResponse> {
     return this.withToken((token) =>
@@ -53,6 +64,20 @@ export class MatchApiService {
     return this.withToken((token) =>
       this.createSseStream(`${this.baseUrl}/open/by-championship?championshipId=${championshipId}`, token),
     );
+  }
+
+  streamInProgressMatches(): Observable<MatchResponse> {
+    return this.withToken((token) =>
+      this.createSseStream(`${this.baseUrl}/in-progress`, token),
+    );
+  }
+
+  closeMatches(requests: CloseMatchRequest[]): Observable<void> {
+    const token = this.authSessionService.getAccessToken();
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token ?? ''}`,
+    });
+    return this.http.patch<void>(this.baseUrl, requests, { headers });
   }
 
   private withToken(

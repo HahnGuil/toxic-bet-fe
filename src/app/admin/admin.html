@@ -4,15 +4,39 @@
 
     <div class="admin-body">
       <section class="admin-content" aria-label="Conteúdo administrativo">
-        <h2 class="admin-section-title">ADMINISTRADOR</h2>
-
-        <div class="admin-placeholder">
-          <svg class="admin-placeholder-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-            <path fill="currentColor" d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/>
-          </svg>
-          <p class="admin-placeholder-text">Área em construção</p>
-        </div>
+        <h2 class="admin-section-title">PARTIDAS EM ANDAMENTO</h2>
       </section>
+
+      <section class="admin-match-list" aria-label="Lista de partidas em andamento">
+        @for (match of inProgressMatches(); track match.matchId) {
+          <app-admin-match-card
+            [match]="match"
+            [invalid]="isInvalid(match.matchId)"
+            (stateChange)="onCardStateChange($event)"
+          />
+        } @empty {
+          <p class="admin-match-list-empty">Nenhuma partida em andamento.</p>
+        }
+      </section>
+
+      @if (submitError()) {
+        <div class="admin-submit-error" role="alert">{{ submitError() }}</div>
+      }
+
+      @if (submitSuccess()) {
+        <div class="admin-submit-success" role="status">Partidas encerradas com sucesso!</div>
+      }
+    </div>
+
+    <div class="admin-submit-bar">
+      <button
+        type="button"
+        class="admin-submit-btn"
+        [disabled]="isSubmitting() || !hasCheckedMatches()"
+        (click)="onSubmit()"
+      >
+        {{ isSubmitting() ? 'ENVIANDO...' : 'ENVIAR' }}
+      </button>
     </div>
 
     <app-footer />

@@ -1,0 +1,424 @@
+:host {
+  display: block;
+}
+
+.match-card {
+  background: #fff;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.13), 0 1px 4px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  border: 2px solid transparent;
+  transition: border-color 160ms ease;
+}
+
+.match-card--error {
+  border-color: #dc2626;
+}
+
+/* ── Header ── */
+.card-header {
+  background: #115e59;
+  color: #fff;
+  padding: 0.47rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.championship-name {
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* ── Checkbox ── */
+.card-checkbox-label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.card-checkbox {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.card-checkbox-custom {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  border: 2px solid rgba(255, 255, 255, 0.7);
+  border-radius: 0.25rem;
+  background: transparent;
+  transition: background 140ms ease, border-color 140ms ease;
+  flex-shrink: 0;
+}
+
+.card-checkbox:checked + .card-checkbox-custom {
+  background: #fff;
+  border-color: #fff;
+}
+
+.card-checkbox:checked + .card-checkbox-custom::after {
+  content: '';
+  display: block;
+  width: 0.35rem;
+  height: 0.62rem;
+  border: 2px solid #115e59;
+  border-top: none;
+  border-left: none;
+  transform: rotate(45deg) translateY(-0.05rem);
+}
+
+.card-checkbox-label:focus-within .card-checkbox-custom {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+/* ── Body ── */
+.card-body {
+  padding: 0.79rem 1rem 0.63rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+/* Teams */
+.teams-row {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.team-box {
+  background: #f0fdf4;
+  border: 1.5px solid #115e59;
+  border-radius: 0.5rem;
+  padding: 0.45rem 0.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.94rem;
+  text-align: center;
+}
+
+.team-name {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #0f172a;
+  line-height: 1.25;
+}
+
+.teams-separator {
+  font-size: 1.1rem;
+  font-weight: 900;
+  color: #115e59;
+  line-height: 1;
+}
+
+/* ── Result Radio Group ── */
+.result-radio-group {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 0.4rem;
+}
+
+.result-radio-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  cursor: pointer;
+  padding: 0.45rem 0.25rem;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 0.5rem;
+  background: #f8fafc;
+  transition: border-color 130ms ease, background 130ms ease;
+  user-select: none;
+}
+
+.result-radio-label--selected {
+  border-color: #115e59;
+  background: #f0fdf4;
+}
+
+.result-radio-label:focus-within {
+  outline: 2px solid #0ea5a1;
+  outline-offset: 1px;
+}
+
+.result-radio {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.result-radio-custom {
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid #94a3b8;
+  border-radius: 50%;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: border-color 130ms ease;
+}
+
+.result-radio-label--selected .result-radio-custom {
+  border-color: #115e59;
+}
+
+.result-radio-label--selected .result-radio-custom::after {
+  content: '';
+  display: block;
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 50%;
+  background: #115e59;
+}
+
+.result-radio-text {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #64748b;
+  letter-spacing: 0.05em;
+  text-align: center;
+}
+
+.result-radio-label--selected .result-radio-text {
+  color: #115e59;
+}
+
+/* ── Error message ── */
+.result-error-msg {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #dc2626;
+  margin: 0;
+  text-align: center;
+}
+
+/* ── Footer ── */
+.card-footer {
+  background: #f8fafc;
+  border-top: 1px solid #e2e8f0;
+  padding: 0.42rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.match-time {
+  font-size: 0.78rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.match-result {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 0.18rem 0.5rem;
+  border-radius: 0.3rem;
+  white-space: nowrap;
+}
+
+.result-in-progress {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+
+/* ── Header ── */
+.card-header {
+  background: #115e59;
+  color: #fff;
+  padding: 0.47rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.championship-name {
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* ── Checkbox ── */
+.card-checkbox-label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.card-checkbox {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.card-checkbox-custom {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  border: 2px solid rgba(255, 255, 255, 0.7);
+  border-radius: 0.25rem;
+  background: transparent;
+  transition: background 140ms ease, border-color 140ms ease;
+  flex-shrink: 0;
+}
+
+.card-checkbox:checked + .card-checkbox-custom {
+  background: #fff;
+  border-color: #fff;
+}
+
+.card-checkbox:checked + .card-checkbox-custom::after {
+  content: '';
+  display: block;
+  width: 0.35rem;
+  height: 0.62rem;
+  border: 2px solid #115e59;
+  border-top: none;
+  border-left: none;
+  transform: rotate(45deg) translateY(-0.05rem);
+}
+
+.card-checkbox-label:focus-within .card-checkbox-custom {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+/* ── Body ── */
+.card-body {
+  padding: 0.79rem 1rem 0.63rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+/* Teams */
+.teams-row {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.team-box {
+  background: #f0fdf4;
+  border: 1.5px solid #115e59;
+  border-radius: 0.5rem;
+  padding: 0.45rem 0.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.94rem;
+  text-align: center;
+}
+
+.team-name {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #0f172a;
+  line-height: 1.25;
+}
+
+.teams-separator {
+  font-size: 1.1rem;
+  font-weight: 900;
+  color: #115e59;
+  line-height: 1;
+}
+
+/* Odds */
+.odds-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 0.4rem;
+}
+
+.odds-rect {
+  background: #fff;
+  border: 1.5px solid #115e59;
+  border-radius: 0.35rem;
+  padding: 0.35rem 0.25rem;
+  text-align: center;
+}
+
+.odds-rect .odds-value {
+  color: #115e59;
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+/* Odds labels */
+.odds-labels {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 0.4rem;
+}
+
+.odds-labels span {
+  text-align: center;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #115e59;
+  letter-spacing: 0.06em;
+}
+
+/* ── Footer ── */
+.card-footer {
+  background: #f8fafc;
+  border-top: 1px solid #e2e8f0;
+  padding: 0.42rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.match-time {
+  font-size: 0.78rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.match-result {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 0.18rem 0.5rem;
+  border-radius: 0.3rem;
+  white-space: nowrap;
+}
+
+.result-in-progress {
+  background: #fef3c7;
+  color: #92400e;
+}
