@@ -109,31 +109,47 @@
           </p>
         } @else {
           <label class="edit-dialog-label" for="change-pw-old">SENHA ATUAL</label>
-          <input
-            id="change-pw-old"
-            class="edit-dialog-input"
-            [class.edit-dialog-input--invalid]="changePwOldInvalid"
-            type="password"
-            autocomplete="current-password"
-            placeholder="Senha atual"
-            [(ngModel)]="changePwOld"
-            [disabled]="isChangingPw()"
-          />
+          <div class="pw-wrap" [class.pw-wrap--visible]="showOldPw()">
+            <input
+              id="change-pw-old"
+              class="edit-dialog-input"
+              [class.edit-dialog-input--invalid]="changePwOldInvalid"
+              [type]="showOldPw() ? 'text' : 'password'"
+              autocomplete="current-password"
+              placeholder="Senha atual"
+              [(ngModel)]="changePwOld"
+              [disabled]="isChangingPw()"
+            />
+            <button type="button" class="pw-toggle" (click)="showOldPw.set(!showOldPw())" tabindex="-1" aria-label="Alternar visibilidade da senha">
+              <svg class="pw-eye pw-eye--open" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"><path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0"/><path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8m8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7"/></svg>
+              <svg class="pw-eye pw-eye--slash" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"><path d="m10.79 12.912-1.614-1.615a3.5 3.5 0 0 1-4.474-4.474l-2.06-2.06C.938 6.278 0 8 0 8s3 5.5 8 5.5a7 7 0 0 0 2.79-.588M5.21 3.088A7 7 0 0 1 8 2.5c5 0 8 5.5 8 5.5s-.939 1.721-2.641 3.238l-2.062-2.062a3.5 3.5 0 0 0-4.474-4.474z"/><path d="M5.525 7.646a2.5 2.5 0 0 0 2.829 2.829zm4.95.708-2.829-2.83a2.5 2.5 0 0 1 2.829 2.829zm3.171 6-12-12 .708-.708 12 12z"/></svg>
+            </button>
+          </div>
           @if (changePwOldInvalid) {
             <p class="edit-dialog-error">Informe a senha atual.</p>
           }
 
           <label class="edit-dialog-label" for="change-pw-new">NOVA SENHA</label>
-          <input
-            id="change-pw-new"
-            class="edit-dialog-input"
-            [class.edit-dialog-input--invalid]="changePwNewInvalid"
-            type="password"
-            autocomplete="new-password"
-            placeholder="Nova senha (8-12 chars, A-z, 0-9, símbolo)"
-            [(ngModel)]="changePwNew"
-            [disabled]="isChangingPw()"
-          />
+          <div class="pw-wrap" [class.pw-wrap--visible]="showNewPw()">
+            <input
+              id="change-pw-new"
+              class="edit-dialog-input"
+              [class.edit-dialog-input--invalid]="changePwNewInvalid"
+              [type]="showNewPw() ? 'text' : 'password'"
+              autocomplete="new-password"
+              placeholder="Nova senha"
+              [(ngModel)]="changePwNew"
+              [disabled]="isChangingPw()"
+              (input)="onNewPwInput()"
+            />
+            <button type="button" class="pw-toggle" (click)="showNewPw.set(!showNewPw())" tabindex="-1" aria-label="Alternar visibilidade da senha">
+              <svg class="pw-eye pw-eye--open" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"><path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0"/><path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8m8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7"/></svg>
+              <svg class="pw-eye pw-eye--slash" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor"><path d="m10.79 12.912-1.614-1.615a3.5 3.5 0 0 1-4.474-4.474l-2.06-2.06C.938 6.278 0 8 0 8s3 5.5 8 5.5a7 7 0 0 0 2.79-.588M5.21 3.088A7 7 0 0 1 8 2.5c5 0 8 5.5 8 5.5s-.939 1.721-2.641 3.238l-2.062-2.062a3.5 3.5 0 0 0-4.474-4.474z"/><path d="M5.525 7.646a2.5 2.5 0 0 0 2.829 2.829zm4.95.708-2.829-2.83a2.5 2.5 0 0 1 2.829 2.829zm3.171 6-12-12 .708-.708 12 12z"/></svg>
+            </button>
+          </div>
+          @if (showPwHint()) {
+            <p class="pw-hint-tooltip">Use 8 a 12 caracteres com maiúscula, minúscula, número e símbolo.</p>
+          }
           @if (changePwNewInvalid) {
             <p class="edit-dialog-error">Use 8 a 12 caracteres com maiúscula, minúscula, número e símbolo.</p>
           }

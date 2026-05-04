@@ -169,7 +169,7 @@ export class Match implements OnDestroy {
   }
 
   protected readonly isPageTransitioning = signal(false);
-  protected readonly selectedMatchView = signal<'all' | 'open'>('all');
+  protected readonly selectedMatchView = signal<'all' | 'open'>('open');
 
   protected selectMatchView(view: 'all' | 'open'): void {
     this.selectedMatchView.set(view);

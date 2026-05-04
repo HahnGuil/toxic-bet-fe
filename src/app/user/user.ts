@@ -39,6 +39,9 @@ export class User implements OnInit, OnDestroy {
 
   // Change password popup
   protected readonly changePwOpen = signal(false);
+  protected readonly showOldPw = signal(false);
+  protected readonly showNewPw = signal(false);
+  protected readonly showPwHint = signal(false);
   protected changePwOld = '';
   protected changePwNew = '';
   protected readonly isChangingPw = signal(false);
@@ -48,6 +51,7 @@ export class User implements OnInit, OnDestroy {
 
   private changePwSub: Subscription | null = null;
   private logoutTimer: ReturnType<typeof setTimeout> | null = null;
+  private pwHintTimer: ReturnType<typeof setTimeout> | null = null;
 
   protected get userInitials(): string {
     const name = this.profile()?.fullName ?? this.authSessionService.getSessionUserName() ?? '';
@@ -83,6 +87,7 @@ export class User implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.changePwSub?.unsubscribe();
     if (this.logoutTimer !== null) clearTimeout(this.logoutTimer);
+    if (this.pwHintTimer !== null) clearTimeout(this.pwHintTimer);
   }
 
   protected openEditPopup(): void {
@@ -122,12 +127,19 @@ export class User implements OnInit, OnDestroy {
   }
 
   // ── Change password ──────────────────────────────────────────────────────
+  protected onNewPwInput(): void {
+    this.showPwHint.set(true);
+    if (this.pwHintTimer !== null) clearTimeout(this.pwHintTimer);
+    this.pwHintTimer = setTimeout(() => this.showPwHint.set(false), 2000);
+  }
+
   protected openChangePwPopup(): void {
     this.changePwOld = '';
     this.changePwNew = '';
     this.changePwSubmitAttempted.set(false);
     this.changePwError.set(null);
     this.changePwSuccess.set(false);
+    this.showPwHint.set(false);
     this.changePwOpen.set(true);
   }
 

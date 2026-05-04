@@ -25,6 +25,8 @@ export class Login {
 
   protected readonly isSubmitting = signal(false);
   protected readonly isPageTransitioning = signal(false);
+  protected readonly showPwLogin = signal(false);
+  protected readonly showPwReset = signal(false);
   protected readonly submitAttempted = signal(false);
   protected readonly activeTypingField = signal<'email' | 'password' | null>(null);
   protected readonly backendErrorMessage = signal<string | null>(null);

@@ -1,5 +1,55 @@
 /* You can add global styles to this file, and also import other style files */
 
+/* ── Password visibility toggle ── */
+.pw-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.pw-wrap input {
+  width: 100%;
+  padding-right: 2.6rem;
+  box-sizing: border-box;
+}
+
+.pw-toggle {
+  position: absolute;
+  right: 0.65rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: #94a3b8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.pw-toggle:hover {
+  color: #cbd5e1;
+}
+
+.pw-toggle svg.pw-eye { width: 1rem; height: 1rem; }
+
+/* hidden state: show slash, hide open */
+.pw-toggle .pw-eye--open  { display: none; }
+.pw-toggle .pw-eye--slash { display: block; }
+/* hover when hidden: show open */
+.pw-toggle:hover .pw-eye--open  { display: block; }
+.pw-toggle:hover .pw-eye--slash { display: none; }
+
+/* visible state: show open, hide slash */
+.pw-wrap--visible .pw-toggle .pw-eye--open  { display: block; }
+.pw-wrap--visible .pw-toggle .pw-eye--slash { display: none; }
+/* hover when visible: show slash */
+.pw-wrap--visible .pw-toggle:hover .pw-eye--open  { display: none; }
+.pw-wrap--visible .pw-toggle:hover .pw-eye--slash { display: block; }
+
 html,
 body {
 	width: 100%;

@@ -18,6 +18,7 @@ export class Cadastro {
 
   protected readonly isSubmitting = signal(false);
   protected readonly submitAttempted = signal(false);
+  protected readonly showPw = signal(false);
   protected readonly activeTypingField = signal<'username' | 'firstName' | 'lastName' | 'email' | 'password' | null>(null);
   protected readonly backendErrorMessage = signal<string | null>(null);
   protected readonly successMessage = signal<string | null>(null);

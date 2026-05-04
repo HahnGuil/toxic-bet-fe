@@ -19,7 +19,7 @@ export class Bet implements OnInit {
   private readonly betResultsApi = inject(BetResultsApiService);
 
   protected readonly isPageTransitioning = signal(false);
-  protected readonly selectedBetView = signal<'all' | 'open'>('all');
+  protected readonly selectedBetView = signal<'all' | 'open'>('open');
   protected readonly betResults = signal<BetResultDTO[]>([]);
   protected readonly openBetResults = signal<OpenBetResultDTO[]>([]);
   protected readonly loadError = signal(false);

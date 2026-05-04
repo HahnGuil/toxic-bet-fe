@@ -4,6 +4,19 @@
   height: 100%;
 }
 
+.pw-hint-tooltip {
+  margin: 0.3rem 0 0;
+  font-size: 0.72rem;
+  color: #94a3b8;
+  line-height: 1.4;
+  animation: hint-fade-in 0.15s ease;
+}
+
+@keyframes hint-fade-in {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
 .user-page {
   height: 100%;
   min-height: 100vh;
