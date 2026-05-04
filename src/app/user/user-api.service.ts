@@ -13,6 +13,7 @@ export interface UserProfileResponse {
 }
 
 export type PatchUsernameError = 'conflict' | 'invalid' | 'unknown';
+export type ChangePasswordError = 'wrong-password' | 'gmail-user' | 'invalid-password' | 'not-found' | 'unknown';
 
 @Injectable({ providedIn: 'root' })
 export class UserApiService {
@@ -43,6 +44,27 @@ export class UserApiService {
             let kind: PatchUsernameError = 'unknown';
             if (err?.status === 409) kind = 'conflict';
             else if (err?.status === 422) kind = 'invalid';
+            observer.next(kind);
+            observer.complete();
+          },
+        });
+    });
+  }
+
+  changePassword(email: string, oldPassword: string, newPassword: string): Observable<ChangePasswordError | null> {
+    const token = this.authSession.getAccessToken();
+    const headers = new HttpHeaders({ Authorization: `Bearer ${token ?? ''}` });
+    return new Observable((observer) => {
+      this.http
+        .patch<void>(`${this.baseUrl}/password/change-password`, { email, oldPassword, newPassword }, { headers })
+        .subscribe({
+          next: () => { observer.next(null); observer.complete(); },
+          error: (err) => {
+            const msg: string = err?.error?.message ?? '';
+            let kind: ChangePasswordError = 'unknown';
+            if (err?.status === 401) kind = 'wrong-password';
+            else if (err?.status === 404) kind = 'not-found';
+            else if (err?.status === 422) kind = msg.toLowerCase().includes('gmail') ? 'gmail-user' : 'invalid-password';
             observer.next(kind);
             observer.complete();
           },

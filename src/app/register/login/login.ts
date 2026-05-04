@@ -205,6 +205,25 @@ export class Login {
     nextInput?.focus();
   }
 
+  protected onResetCodePaste(event: ClipboardEvent, startIndex: number): void {
+    const text = event.clipboardData?.getData('text') ?? '';
+    const digits = text.replace(/\D/g, '').slice(0, this.resetCodeFields.length);
+    if (!digits || typeof document === 'undefined') return;
+
+    event.preventDefault();
+    digits.split('').forEach((digit, offset) => {
+      const fieldIndex = startIndex + offset;
+      if (fieldIndex >= this.resetCodeFields.length) return;
+      const field = this.resetCodeFields[fieldIndex];
+      this.resetCodeForm.controls[field].setValue(digit);
+    });
+
+    const lastFilledIndex = Math.min(startIndex + digits.length - 1, this.resetCodeFields.length - 1);
+    const focusIndex = lastFilledIndex < this.resetCodeFields.length - 1 ? lastFilledIndex + 1 : lastFilledIndex;
+    const nextInput = document.getElementById(`reset-code-${focusIndex}`) as HTMLInputElement | null;
+    nextInput?.focus();
+  }
+
   protected onResetCodeKeyDown(event: KeyboardEvent, index: number): void {
     if (event.key !== 'Backspace' || typeof document === 'undefined' || index <= 0) {
       return;

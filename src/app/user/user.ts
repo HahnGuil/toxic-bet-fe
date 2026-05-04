@@ -1,12 +1,15 @@
-import { ChangeDetectionStrategy, Component, OnInit, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 import { AppFooter } from '../shared/footer/footer';
 import { AppHeader } from '../shared/header/header';
 import { AuthService } from '../register/services/auth.service';
 import { AuthSessionService } from '../register/services/auth-session.service';
-import { UserApiService, UserProfileResponse } from './user-api.service';
+import { ChangePasswordError, UserApiService, UserProfileResponse } from './user-api.service';
+
+const PASSWORD_PATTERN = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,12}$/;
 
 @Component({
   selector: 'app-user',
@@ -16,7 +19,7 @@ import { UserApiService, UserProfileResponse } from './user-api.service';
   styleUrl: './user.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class User implements OnInit {
+export class User implements OnInit, OnDestroy {
   private readonly authSessionService = inject(AuthSessionService);
   private readonly authService = inject(AuthService);
   private readonly userApi = inject(UserApiService);
@@ -28,11 +31,23 @@ export class User implements OnInit {
   protected readonly profile = signal<UserProfileResponse | null>(null);
   protected readonly loadError = signal(false);
 
-  // Popup state
+  // Edit username popup
   protected readonly editPopupOpen = signal(false);
   protected editUserNameValue = '';
   protected readonly isSaving = signal(false);
   protected readonly saveError = signal<string | null>(null);
+
+  // Change password popup
+  protected readonly changePwOpen = signal(false);
+  protected changePwOld = '';
+  protected changePwNew = '';
+  protected readonly isChangingPw = signal(false);
+  protected readonly changePwSubmitAttempted = signal(false);
+  protected readonly changePwError = signal<string | null>(null);
+  protected readonly changePwSuccess = signal(false);
+
+  private changePwSub: Subscription | null = null;
+  private logoutTimer: ReturnType<typeof setTimeout> | null = null;
 
   protected get userInitials(): string {
     const name = this.profile()?.fullName ?? this.authSessionService.getSessionUserName() ?? '';
@@ -42,6 +57,14 @@ export class User implements OnInit {
       .slice(0, 2)
       .map((n) => n[0].toUpperCase())
       .join('');
+  }
+
+  protected get changePwOldInvalid(): boolean {
+    return this.changePwSubmitAttempted() && !this.changePwOld.trim();
+  }
+
+  protected get changePwNewInvalid(): boolean {
+    return this.changePwSubmitAttempted() && !PASSWORD_PATTERN.test(this.changePwNew);
   }
 
   ngOnInit(): void {
@@ -55,6 +78,11 @@ export class User implements OnInit {
         this.profile.set(data);
       }
     });
+  }
+
+  ngOnDestroy(): void {
+    this.changePwSub?.unsubscribe();
+    if (this.logoutTimer !== null) clearTimeout(this.logoutTimer);
   }
 
   protected openEditPopup(): void {
@@ -93,6 +121,53 @@ export class User implements OnInit {
     });
   }
 
+  // ── Change password ──────────────────────────────────────────────────────
+  protected openChangePwPopup(): void {
+    this.changePwOld = '';
+    this.changePwNew = '';
+    this.changePwSubmitAttempted.set(false);
+    this.changePwError.set(null);
+    this.changePwSuccess.set(false);
+    this.changePwOpen.set(true);
+  }
+
+  protected closeChangePwPopup(): void {
+    if (this.isChangingPw()) return;
+    this.changePwOpen.set(false);
+  }
+
+  protected submitChangePassword(): void {
+    this.changePwSubmitAttempted.set(true);
+    const email = this.profile()?.email;
+
+    if (!email || !this.changePwOld.trim() || !PASSWORD_PATTERN.test(this.changePwNew)) {
+      return;
+    }
+
+    this.isChangingPw.set(true);
+    this.changePwError.set(null);
+
+    this.changePwSub = this.userApi.changePassword(email, this.changePwOld, this.changePwNew).subscribe((error) => {
+      this.isChangingPw.set(false);
+
+      if (error === null) {
+        this.changePwSuccess.set(true);
+        this.logoutTimer = setTimeout(() => this.logout(), 3000);
+        return;
+      }
+
+      const messages: Record<ChangePasswordError, string> = {
+        'wrong-password': 'Senha atual incorreta.',
+        'gmail-user': 'Não é possível alterar a senha de contas cadastradas via Google.',
+        'invalid-password': 'A nova senha deve ter 8 a 12 caracteres com maiúscula, minúscula, número e símbolo.',
+        'not-found': 'Usuário não encontrado.',
+        'unknown': 'Erro ao alterar a senha. Tente novamente.',
+      };
+      this.changePwError.set(messages[error]);
+    });
+  }
+
+  // ────────────────────────────────────────────────────────────────────────
   protected logout(): void {
     if (this.isLoggingOut()) return;
 

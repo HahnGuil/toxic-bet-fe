@@ -166,6 +166,7 @@
                 [class.input-invalid]="showResetCodeFieldError(field)"
                 [attr.aria-label]="'Digito ' + (i + 1) + ' do codigo'"
                 (input)="onResetCodeInput(field, $event, i)"
+                (paste)="onResetCodePaste($event, i)"
                 (blur)="stopResetCodeTyping(field)"
                 (keydown)="onResetCodeKeyDown($event, i)"
               />
