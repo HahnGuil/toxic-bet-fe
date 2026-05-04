@@ -21,8 +21,10 @@
 }
 
 .brand-icon {
-  font-size: 1.35rem;
-  line-height: 1;
+  display: block;
+  width: 1.42rem;
+  height: 1.42rem;
+  flex-shrink: 0;
 }
 
 .brand-text {

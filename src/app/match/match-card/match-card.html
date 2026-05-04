@@ -43,7 +43,7 @@
         [disabled]="isSubmitting()"
         (click)="placeBet()"
       >
-        {{ isSubmitting() ? 'PLACING...' : 'PLACE BET' }}
+        {{ isSubmitting() ? 'APOSTANDO...' : 'APOSTAR' }}
       </button>
     } @else {
       <span class="match-result" [class]="resultClass(match().result)">

@@ -58,11 +58,10 @@
 }
 
 .toxic-symbol {
-  margin: 0.45rem 0 0;
-  text-align: center;
-  font-size: 3.2rem;
-  line-height: 1;
-  color: #0f172a;
+  display: block;
+  margin: 0.45rem auto 0;
+  width: 3.2rem;
+  height: 3.2rem;
 }
 
 .auth-tagline {
