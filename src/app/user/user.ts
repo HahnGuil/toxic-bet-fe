@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnInit, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 import { AppFooter } from '../shared/footer/footer';
 import { AppHeader } from '../shared/header/header';
@@ -11,7 +11,7 @@ import { UserApiService, UserProfileResponse } from './user-api.service';
 @Component({
   selector: 'app-user',
   standalone: true,
-  imports: [AppHeader, AppFooter, FormsModule],
+  imports: [AppHeader, AppFooter, FormsModule, RouterLink],
   templateUrl: './user.html',
   styleUrl: './user.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -24,6 +24,7 @@ export class User implements OnInit {
 
   protected readonly isPageTransitioning = signal(false);
   protected readonly isLoggingOut = signal(false);
+  protected readonly isAdmin = signal(false);
   protected readonly profile = signal<UserProfileResponse | null>(null);
   protected readonly loadError = signal(false);
 
@@ -44,6 +45,9 @@ export class User implements OnInit {
   }
 
   ngOnInit(): void {
+    this.authSessionService.initializeFromStorage();
+    this.isAdmin.set(this.authSessionService.isAdmin());
+
     this.userApi.getProfile().subscribe((data) => {
       if (data === null) {
         this.loadError.set(true);

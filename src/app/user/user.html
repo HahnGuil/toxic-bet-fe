@@ -49,6 +49,16 @@
           <p class="user-loading">Carregando perfil...</p>
         }
 
+        @if (isAdmin()) {
+          <button
+            type="button"
+            class="user-admin-btn"
+            routerLink="/admin"
+          >
+            Admin
+          </button>
+        }
+
         <button
           type="button"
           class="user-logout-btn"

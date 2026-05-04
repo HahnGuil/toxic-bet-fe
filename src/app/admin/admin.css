@@ -1,0 +1,84 @@
+:host {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.admin-page {
+  height: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: block;
+  padding: 0;
+  box-sizing: border-box;
+  overflow: hidden;
+  opacity: 1;
+  transition: opacity 220ms ease;
+  animation: admin-fade-in 260ms ease both;
+  background: radial-gradient(circle at top left, #0ea5a1 0%, #0f172a 55%, #020617 100%);
+}
+
+.admin-page.page-fade-out {
+  opacity: 0;
+}
+
+@keyframes admin-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.admin-shell {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-rows: 4.9rem 1fr 6rem;
+  box-sizing: border-box;
+  overflow: hidden;
+  background: rgb(255 255 255 / 0.96);
+}
+
+.admin-body {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.admin-content {
+  flex-shrink: 0;
+  padding: 1.5rem 1.5rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.admin-section-title {
+  text-align: center;
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: #115e59;
+  margin: 0;
+}
+
+.admin-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 3rem 1rem;
+  color: #94a3b8;
+}
+
+.admin-placeholder-icon {
+  width: 3.5rem;
+  height: 3.5rem;
+  opacity: 0.5;
+}
+
+.admin-placeholder-text {
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin: 0;
+}

@@ -223,6 +223,25 @@
   color: #dc2626;
 }
 
+/* ── Admin button ── */
+.user-admin-btn {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  border: 2px solid #115e59;
+  background: #115e59;
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  transition: background 120ms;
+}
+
+.user-admin-btn:hover {
+  background: #0f4f4b;
+}
+
 /* ── Logout button ── */
 .user-logout-btn {
   width: 100%;

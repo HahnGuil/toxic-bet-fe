@@ -165,6 +165,21 @@ export class AuthSessionService {
     return this.sessionState()?.userName ?? null;
   }
 
+  isAdmin(): boolean {
+    const token = this.getAccessToken();
+    if (!token) return false;
+    try {
+      const payloadPart = token.split('.')[1];
+      if (!payloadPart) return false;
+      const normalized = payloadPart.replace(/-/g, '+').replace(/_/g, '/');
+      const padded = normalized.padEnd(normalized.length + (4 - (normalized.length % 4 || 4)) % 4, '=');
+      const payload = JSON.parse(atob(padded)) as { application_role?: string };
+      return payload.application_role === 'ADMIN';
+    } catch {
+      return false;
+    }
+  }
+
   private refreshSessionTokenIfNeeded(): void {
     const session = this.sessionState();
     if (!session || this.isRefreshing) {
