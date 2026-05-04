@@ -13,7 +13,7 @@ const ODD_TO_RESULT: Record<OddType, BetResult> = {
 };
 
 const RESULT_LABELS: Record<MatchResult, string> = {
-  HOME_WIN: 'HOME WIN',
+  HOME_WIN: 'MANDANTE',
   VISITING_WIN: 'VISITING WIN',
   DRAW: 'DRAW',
   NOT_STARTED: 'NOT STARTED',

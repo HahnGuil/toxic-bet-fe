@@ -1,0 +1,33 @@
+<article class="bet-card">
+  <div class="card-body">
+    <div class="teams-row">
+      <div class="team-box">
+        <span class="team-name">{{ bet().homeTeamName }}</span>
+      </div>
+      <span class="teams-separator" aria-hidden="true">X</span>
+      <div class="team-box">
+        <span class="team-name">{{ bet().visitingTeamName }}</span>
+      </div>
+    </div>
+
+    <div
+      class="match-status-row"
+      [class.match-status-row--in-progress]="bet().matchResult === 'IN_PROGRESS'"
+      [class.match-status-row--open]="bet().matchResult === 'OPEN_FOR_BETTING'"
+    >
+      <span class="match-status-text">{{ matchStatusLabel() }}</span>
+    </div>
+
+    <div class="bet-details-row">
+      <div class="bet-details-item">
+        <span class="bet-details-label">RESULTADO APOSTADO</span>
+        <span class="bet-details-value">{{ betResultLabel() }}</span>
+      </div>
+      <div class="bet-details-divider" aria-hidden="true"></div>
+      <div class="bet-details-item">
+        <span class="bet-details-label">ODD DA APOSTA</span>
+        <span class="bet-details-value">{{ bet().betOdds }}</span>
+      </div>
+    </div>
+  </div>
+</article>

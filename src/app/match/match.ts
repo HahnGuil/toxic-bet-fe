@@ -150,6 +150,12 @@ export class Match implements OnDestroy {
   }
 
     protected onChampionshipChange(value: string): void {
+      if (!value) {
+        this.selectedChampionship.set(null);
+        this.loadMatches();
+        this.loadOpenMatches();
+        return;
+      }
       const id = Number(value);
       const champ = this.championships().find((c: Championship) => c.idChampionship === id) || null;
       if (champ) {

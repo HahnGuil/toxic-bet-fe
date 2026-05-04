@@ -17,8 +17,8 @@
 
     <div
       class="result-row"
-      [class.result-row--winner]="bet().winner"
-      [class.result-row--loser]="!bet().winner"
+      [class.result-row--winner]="isWinner()"
+      [class.result-row--loser]="!isWinner()"
       aria-label="Resultado da partida versus resultado apostado"
     >
       <div class="result-item">
