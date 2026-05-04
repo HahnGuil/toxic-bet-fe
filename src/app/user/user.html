@@ -1,0 +1,107 @@
+<main class="user-page" [class.page-fade-out]="isPageTransitioning()">
+  <section class="user-shell" aria-label="Tela de usuário">
+    <app-header (startFadeOut)="isPageTransitioning.set(true)" />
+
+    <div class="user-body">
+      <section class="user-content" aria-label="Perfil do usuário">
+        <h2 class="user-section-title">PERFIL</h2>
+
+        @if (profile(); as p) {
+          <div class="user-avatar" aria-hidden="true">
+            <span class="user-avatar-initials">{{ userInitials }}</span>
+          </div>
+
+          <div class="user-info-card">
+
+            <!-- User Name -->
+            <div class="user-info-row">
+              <span class="user-info-label">USER NAME</span>
+              <div class="user-info-value-row">
+                <span class="user-info-value">{{ p.userName }}</span>
+                <button type="button" class="user-edit-icon-btn" (click)="openEditPopup()" aria-label="Editar user name">
+                  <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                    <path fill="currentColor" d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <div class="user-info-divider"></div>
+
+            <!-- Full Name -->
+            <div class="user-info-row">
+              <span class="user-info-label">NOME</span>
+              <span class="user-info-value">{{ p.fullName }}</span>
+            </div>
+
+            <div class="user-info-divider"></div>
+
+            <!-- Email -->
+            <div class="user-info-row">
+              <span class="user-info-label">EMAIL</span>
+              <span class="user-info-value">{{ p.email }}</span>
+            </div>
+
+          </div>
+        } @else if (loadError()) {
+          <p class="user-load-error">Não foi possível carregar o perfil. Tente novamente.</p>
+        } @else {
+          <p class="user-loading">Carregando perfil...</p>
+        }
+
+        <button
+          type="button"
+          class="user-logout-btn"
+          [disabled]="isLoggingOut()"
+          (click)="logout()"
+        >
+          {{ isLoggingOut() ? 'SAINDO...' : 'SAIR DA CONTA' }}
+        </button>
+      </section>
+    </div>
+
+    <app-footer />
+  </section>
+</main>
+
+@if (editPopupOpen()) {
+  <div class="edit-overlay" (click)="closeEditPopup()" role="dialog" aria-modal="true" aria-label="Editar user name">
+    <div class="edit-dialog" (click)="$event.stopPropagation()">
+      <div class="edit-dialog-header">
+        <span class="edit-dialog-title">Editar User Name</span>
+        <button type="button" class="edit-dialog-close" aria-label="Fechar" (click)="closeEditPopup()">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" width="18" height="18">
+            <path fill="currentColor" d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="edit-dialog-body">
+        <label class="edit-dialog-label" for="edit-username-input">Novo User Name</label>
+        <input
+          id="edit-username-input"
+          class="edit-dialog-input"
+          type="text"
+          [(ngModel)]="editUserNameValue"
+          (keydown.enter)="saveUserName()"
+          (keydown.escape)="closeEditPopup()"
+          placeholder="Digite o novo user name"
+          [disabled]="isSaving()"
+          autofocus
+        />
+        @if (saveError()) {
+          <p class="edit-dialog-error">{{ saveError() }}</p>
+        }
+      </div>
+
+      <div class="edit-dialog-footer">
+        <button type="button" class="edit-dialog-btn edit-dialog-btn--cancel" (click)="closeEditPopup()" [disabled]="isSaving()">
+          Cancelar
+        </button>
+        <button type="button" class="edit-dialog-btn edit-dialog-btn--save" (click)="saveUserName()" [disabled]="isSaving()">
+          {{ isSaving() ? 'Salvando...' : 'Salvar' }}
+        </button>
+      </div>
+    </div>
+  </div>
+}

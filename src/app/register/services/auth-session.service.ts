@@ -161,6 +161,10 @@ export class AuthSessionService {
     return this.sessionState()?.email ?? null;
   }
 
+  getSessionUserName(): string | null {
+    return this.sessionState()?.userName ?? null;
+  }
+
   private refreshSessionTokenIfNeeded(): void {
     const session = this.sessionState();
     if (!session || this.isRefreshing) {

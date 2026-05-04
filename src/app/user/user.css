@@ -1,0 +1,387 @@
+:host {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.user-page {
+  height: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: block;
+  padding: 0;
+  box-sizing: border-box;
+  overflow: hidden;
+  opacity: 1;
+  transition: opacity 220ms ease;
+  animation: user-fade-in 260ms ease both;
+  background: radial-gradient(circle at top left, #0ea5a1 0%, #0f172a 55%, #020617 100%);
+}
+
+.user-page.page-fade-out {
+  opacity: 0;
+}
+
+@keyframes user-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.user-shell {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-rows: 4.9rem 1fr 6rem;
+  box-sizing: border-box;
+  overflow: hidden;
+  background: rgb(255 255 255 / 0.96);
+}
+
+.user-body {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+/* ── Content ── */
+.user-content {
+  flex-shrink: 0;
+  padding: 1.5rem 1.5rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.user-section-title {
+  text-align: center;
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: #115e59;
+  margin: 0;
+}
+
+/* ── Avatar ── */
+.user-avatar {
+  width: 5rem;
+  height: 5rem;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #0ea5a1 0%, #115e59 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 14px rgba(17, 94, 89, 0.35);
+}
+
+.user-avatar-initials {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: 0.05em;
+}
+
+/* ── Info card ── */
+.user-info-card {
+  width: 100%;
+  background: #fff;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1), 0 1px 4px rgba(0, 0, 0, 0.07);
+  overflow: hidden;
+}
+
+.user-info-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding: 0.85rem 1rem;
+}
+
+.user-info-label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #64748b;
+}
+
+.user-info-value-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.user-info-value {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #0f172a;
+  word-break: break-all;
+  flex: 1;
+}
+
+.user-edit-icon-btn {
+  flex-shrink: 0;
+  width: 1.75rem;
+  height: 1.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  border-radius: 0.35rem;
+  color: #115e59;
+  cursor: pointer;
+  padding: 0.2rem;
+  transition: background 120ms;
+}
+
+.user-edit-icon-btn svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.user-edit-icon-btn:hover {
+  background: #f0fdf4;
+}
+
+/* Edit mode */
+.user-info-edit-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.user-info-edit-input {
+  flex: 1;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #0f172a;
+  border: 1.5px solid #115e59;
+  border-radius: 0.35rem;
+  padding: 0.3rem 0.5rem;
+  outline: none;
+  background: #f0fdf4;
+}
+
+.user-info-edit-input:focus {
+  box-shadow: 0 0 0 2px rgba(17, 94, 89, 0.2);
+}
+
+.user-edit-action-btn {
+  flex-shrink: 0;
+  width: 1.75rem;
+  height: 1.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 0.35rem;
+  cursor: pointer;
+  padding: 0.2rem;
+  transition: background 120ms;
+}
+
+.user-edit-action-btn svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.user-edit-action-btn--save {
+  background: #115e59;
+  color: #fff;
+}
+
+.user-edit-action-btn--save:hover {
+  background: #0f4f4b;
+}
+
+.user-edit-action-btn--cancel {
+  background: #f1f5f9;
+  color: #64748b;
+}
+
+.user-edit-action-btn--cancel:hover {
+  background: #e2e8f0;
+}
+
+.user-info-divider {
+  height: 1px;
+  background: #e2e8f0;
+  margin: 0 1rem;
+}
+
+/* Loading / Error states */
+.user-loading,
+.user-load-error {
+  font-size: 0.9rem;
+  color: #64748b;
+  text-align: center;
+  margin: 0;
+}
+
+.user-load-error {
+  color: #dc2626;
+}
+
+/* ── Logout button ── */
+.user-logout-btn {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  border: 2px solid #dc2626;
+  background: #fff;
+  color: #dc2626;
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  transition: background 120ms, color 120ms;
+}
+
+.user-logout-btn:hover {
+  background: #fef2f2;
+}
+
+.user-logout-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ── Edit Username Popup ── */
+.edit-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+.edit-dialog {
+  background: #fff;
+  border-radius: 0.85rem;
+  width: 100%;
+  max-width: 22rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.22);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.edit-dialog-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1rem 0.75rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.edit-dialog-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #0f172a;
+  letter-spacing: 0.02em;
+}
+
+.edit-dialog-close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #64748b;
+  padding: 0.2rem;
+  border-radius: 0.35rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 120ms;
+}
+
+.edit-dialog-close:hover {
+  background: #f1f5f9;
+}
+
+.edit-dialog-body {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.edit-dialog-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: #64748b;
+}
+
+.edit-dialog-input {
+  width: 100%;
+  box-sizing: border-box;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #0f172a;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 0.45rem;
+  padding: 0.55rem 0.75rem;
+  outline: none;
+  transition: border-color 140ms;
+}
+
+.edit-dialog-input:focus {
+  border-color: #115e59;
+  box-shadow: 0 0 0 3px rgba(17, 94, 89, 0.15);
+}
+
+.edit-dialog-input:disabled {
+  opacity: 0.6;
+}
+
+.edit-dialog-error {
+  font-size: 0.78rem;
+  color: #dc2626;
+  margin: 0;
+}
+
+.edit-dialog-footer {
+  display: flex;
+  gap: 0.6rem;
+  padding: 0.75rem 1rem 1rem;
+  justify-content: flex-end;
+}
+
+.edit-dialog-btn {
+  padding: 0.55rem 1.1rem;
+  border-radius: 0.45rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 120ms, color 120ms;
+}
+
+.edit-dialog-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.edit-dialog-btn--cancel {
+  background: #f1f5f9;
+  border: none;
+  color: #475569;
+}
+
+.edit-dialog-btn--cancel:hover:not(:disabled) {
+  background: #e2e8f0;
+}
+
+.edit-dialog-btn--save {
+  background: #115e59;
+  border: none;
+  color: #fff;
+}
+
+.edit-dialog-btn--save:hover:not(:disabled) {
+  background: #0f4f4b;
+}
