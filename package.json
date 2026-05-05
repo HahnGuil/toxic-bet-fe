@@ -7,7 +7,7 @@
     "start:aws": "ng serve --configuration aws",
     "build": "ng build",
     "build:dev": "ng build --configuration development",
-    "build:aws": "ng build --configuration aws --ssr",
+    "build:aws": "ng build --configuration aws",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:toxic-bet-fe": "node dist/toxic-bet-fe/server/server.mjs"
