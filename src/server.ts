@@ -13,7 +13,9 @@ const apiTarget = process.env['API_TARGET'] || 'http://toxic-bet-api:20000';
 const authTarget = process.env['AUTH_TARGET'] || 'http://ms-auth-server:2300';
 
 const app = express();
-const angularApp = new AngularNodeAppEngine();
+const angularApp = new AngularNodeAppEngine({
+  trustProxyHeaders: ['x-forwarded-for', 'x-forwarded-proto', 'x-forwarded-port'],
+});
 
 app.use(express.json());
 
