@@ -1,5 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../environments/environment';
 
 type LogLevel = 'info' | 'warn' | 'error';
 
@@ -9,6 +10,10 @@ export class LoggerService {
   private readonly url = '/log';
 
   info(message: string, data?: unknown): void {
+    if (environment.production) {
+      return;
+    }
+
     this.send('info', message, data);
   }
 

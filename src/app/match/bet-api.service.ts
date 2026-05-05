@@ -40,7 +40,11 @@ export class BetApiService {
       const controller = new AbortController();
 
       fetch(this.baseUrl, {
-        headers: { Authorization: `Bearer ${token}`, Accept: 'text/event-stream' },
+        cache: 'no-store',
+        headers: {
+          Accept: 'text/event-stream',
+          Authorization: `Bearer ${token}`,
+        },
         signal: controller.signal,
       })
         .then((response) => {

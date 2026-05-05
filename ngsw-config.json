@@ -24,17 +24,5 @@
         "files": ["/**/*.(svg|cur|jpg|jpeg|png|apng|webp|avif|gif|otf|ttf|woff|woff2)"]
       }
     }
-  ],
-  "dataGroups": [
-    {
-      "name": "backend-api",
-      "urls": ["/api/**", "/auth-server/**"],
-      "cacheConfig": {
-        "strategy": "freshness",
-        "maxSize": 20,
-        "maxAge": "10m",
-        "timeout": "5s"
-      }
-    }
   ]
 }

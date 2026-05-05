@@ -95,7 +95,11 @@ export class MatchApiService {
       const controller = new AbortController();
 
       fetch(url, {
-        headers: { Authorization: `Bearer ${token}` },
+        cache: 'no-store',
+        headers: {
+          Accept: 'text/event-stream',
+          Authorization: `Bearer ${token}`,
+        },
         signal: controller.signal,
       })
         .then((response) => {
