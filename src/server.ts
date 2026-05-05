@@ -17,17 +17,20 @@ const angularApp = new AngularNodeAppEngine({
   trustProxyHeaders: ['x-forwarded-for', 'x-forwarded-proto', 'x-forwarded-port'],
 });
 
-app.use(express.json());
-
 /**
  * Terminal logging endpoint — receives structured log entries from the Angular client.
  */
-app.post('/log', (req, res) => {
+app.post('/log', express.json(), (req, res) => {
   const { level = 'info', message, data } = req.body as {
     level?: string;
     message?: string;
     data?: unknown;
   };
+  if (process.env['NODE_ENV'] === 'production' && level !== 'error') {
+    res.status(204).end();
+    return;
+  }
+
   const ts = new Date().toISOString();
   const prefix = `[${ts}] [${level.toUpperCase()}]`;
   if (data !== undefined) {
