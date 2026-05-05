@@ -23,6 +23,10 @@ export const routes: Routes = [
 		loadComponent: () => import('./register/login/login-callback').then((m) => m.LoginCallbackComponent),
 	},
 	{
+		path: 'oauth/callback',
+		loadComponent: () => import('./register/login/login-callback').then((m) => m.LoginCallbackComponent),
+	},
+	{
   path: 'match',
   loadComponent: () => import('./match/match').then((m) => m.Match),
   canActivate: [authGuard],
