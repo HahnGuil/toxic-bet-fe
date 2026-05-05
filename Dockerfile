@@ -1,24 +1,21 @@
+# build
 FROM node:22-alpine AS build
 WORKDIR /app
-
-ARG BUILD_SCRIPT=build:aws
 
 COPY package*.json ./
 RUN npm ci
 
 COPY . .
-RUN npm run ${BUILD_SCRIPT}
+RUN npm run build:aws
 
-FROM node:22-alpine AS runtime
+# runtime (server simples)
+FROM node:22-alpine
 WORKDIR /app
 
-ENV NODE_ENV=production
-ENV PORT=4000
+RUN npm install -g serve
 
-COPY package*.json ./
-RUN npm ci --omit=dev
-
-COPY --from=build /app/dist ./dist
+COPY --from=build /app/dist/toxic-bet-fe/browser ./dist
 
 EXPOSE 4000
-CMD ["node", "dist/toxic-bet-fe/server/server.mjs"]
+
+CMD ["serve", "-s", "dist", "-l", "4000"]
