@@ -6,6 +6,7 @@
     "start": "ng serve",
     "start:aws": "ng serve --configuration aws",
     "build": "ng build",
+    "build:dev": "ng build --configuration development",
     "build:aws": "ng build --configuration aws",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",

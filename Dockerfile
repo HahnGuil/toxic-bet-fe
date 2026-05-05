@@ -1,11 +1,13 @@
 FROM node:22-alpine AS build
 WORKDIR /app
 
+ARG BUILD_SCRIPT=build:aws
+
 COPY package*.json ./
 RUN npm ci
 
 COPY . .
-RUN npm run build:aws
+RUN npm run ${BUILD_SCRIPT}
 
 FROM node:22-alpine AS runtime
 WORKDIR /app
