@@ -35,9 +35,23 @@ export class BetApiService {
   }
 
   streamUserBets(): Observable<BetResponseDTO> {
+    return this.createUserBetsStream();
+  }
+
+  loadUserBetsSnapshot(): Observable<BetResponseDTO> {
+    return this.createUserBetsStream(2500);
+  }
+
+  private createUserBetsStream(maxDurationMs?: number): Observable<BetResponseDTO> {
     return new Observable((observer) => {
       const token = this.authSessionService.getAccessToken() ?? '';
       const controller = new AbortController();
+      const timeoutId = maxDurationMs
+        ? setTimeout(() => {
+            controller.abort();
+            observer.complete();
+          }, maxDurationMs)
+        : null;
 
       fetch(this.baseUrl, {
         cache: 'no-store',
@@ -85,7 +99,12 @@ export class BetApiService {
           if (err instanceof Error && err.name !== 'AbortError') observer.error(err);
         });
 
-      return () => controller.abort();
+      return () => {
+        if (timeoutId) {
+          clearTimeout(timeoutId);
+        }
+        controller.abort();
+      };
     });
   }
 }

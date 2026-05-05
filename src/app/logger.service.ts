@@ -18,14 +18,26 @@ export class LoggerService {
   }
 
   warn(message: string, data?: unknown): void {
+    if (this.shouldSkipProductionStreamLog(message)) {
+      return;
+    }
+
     this.send('warn', message, data);
   }
 
   error(message: string, data?: unknown): void {
+    if (this.shouldSkipProductionStreamLog(message)) {
+      return;
+    }
+
     this.send('error', message, data);
   }
 
   private send(level: LogLevel, message: string, data?: unknown): void {
     this.http.post(this.url, { level, message, data }).subscribe();
+  }
+
+  private shouldSkipProductionStreamLog(message: string): boolean {
+    return environment.production && message.startsWith('[Stream:');
   }
 }

@@ -1,8 +1,9 @@
 
 
-import { ChangeDetectionStrategy, Component, inject, signal, computed, effect, OnDestroy } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal, computed, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Subscription } from 'rxjs';
+import { Subscription, timer } from 'rxjs';
+import { retry } from 'rxjs/operators';
 import { ChampionshipApiService, Championship } from './championship-api.service';
 import { MatchApiService, MatchResponse } from './match-api.service';
 import { BetApiService } from './bet-api.service';
@@ -51,19 +52,29 @@ export class Match implements OnDestroy {
 
   constructor() {
     this.loadChampionships();
-    this.loadMatches();
+    this.loadActiveMatchStream();
+    this.loadUserBetsSnapshot();
+  }
+
+  private loadActiveMatchStream(): void {
+    this.matchStreamSub?.unsubscribe();
+    this.openMatchStreamSub?.unsubscribe();
+
+    if (this.selectedMatchView() === 'all') {
+      this.loadMatches();
+      return;
+    }
+
     this.loadOpenMatches();
-    this.loadUserBets();
   }
 
   private loadMatches(): void {
-    this.matchStreamSub?.unsubscribe();
     this.matches.set([]);
     const source$ = this.selectedChampionship()
       ? this.matchApi.streamMatchesByChampionship(this.selectedChampionship()!.idChampionship)
       : this.matchApi.streamAllMatches();
 
-    this.matchStreamSub = source$.subscribe({
+    this.matchStreamSub = source$.pipe(this.retryStream()).subscribe({
       next: (match) => {
         const isUpdate = this.matches().some((m) => m.matchId === match.matchId);
         this.logger.info(
@@ -78,13 +89,12 @@ export class Match implements OnDestroy {
   }
 
   private loadOpenMatches(): void {
-    this.openMatchStreamSub?.unsubscribe();
     this.openMatches.set([]);
     const source$ = this.selectedChampionship()
       ? this.matchApi.streamOpenBettingMatchesByChampionship(this.selectedChampionship()!.idChampionship)
       : this.matchApi.streamOpenBettingMatches();
 
-    this.openMatchStreamSub = source$.subscribe({
+    this.openMatchStreamSub = source$.pipe(this.retryStream()).subscribe({
       next: (match) => {
         const isUpdate = this.openMatches().some((m) => m.matchId === match.matchId);
         this.logger.info(
@@ -114,8 +124,9 @@ export class Match implements OnDestroy {
     this.userBetsSub?.unsubscribe();
   }
 
-  private loadUserBets(): void {
-    this.userBetsSub = this.betApi.streamUserBets().subscribe({
+  private loadUserBetsSnapshot(): void {
+    this.userBetsSub?.unsubscribe();
+    this.userBetsSub = this.betApi.loadUserBetsSnapshot().subscribe({
       next: (bet) => {
         if (bet.matchId != null) {
           this.logger.info('[Stream:UserBets] bet received', { matchId: bet.matchId, result: bet.result, odds: bet.odds });
@@ -152,8 +163,7 @@ export class Match implements OnDestroy {
     protected onChampionshipChange(value: string): void {
       if (!value) {
         this.selectedChampionship.set(null);
-        this.loadMatches();
-        this.loadOpenMatches();
+        this.loadActiveMatchStream();
         return;
       }
       const id = Number(value);
@@ -164,14 +174,24 @@ export class Match implements OnDestroy {
     }
   protected selectChampionship(champ: Championship): void {
     this.selectedChampionship.set(champ);
-    this.loadMatches();
-    this.loadOpenMatches();
+    this.loadActiveMatchStream();
   }
 
   protected readonly isPageTransitioning = signal(false);
   protected readonly selectedMatchView = signal<'all' | 'open'>('open');
 
   protected selectMatchView(view: 'all' | 'open'): void {
+    if (this.selectedMatchView() === view) {
+      return;
+    }
+
     this.selectedMatchView.set(view);
+    this.loadActiveMatchStream();
+  }
+
+  private retryStream<T>() {
+    return retry<T>({
+      delay: (_error, retryCount) => timer(Math.min(1000 * retryCount, 10000)),
+    });
   }
 }

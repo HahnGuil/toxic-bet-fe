@@ -44,6 +44,8 @@ app.use(
     target: apiTarget,
     changeOrigin: true,
     xfwd: true,
+    timeout: 0,
+    proxyTimeout: 0,
     pathRewrite: {
       '^/api': '',
     },
