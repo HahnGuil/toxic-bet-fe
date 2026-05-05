@@ -45,6 +45,15 @@ app.use(
     pathRewrite: {
       '^/api': '',
     },
+    on: {
+      proxyRes: (proxyRes) => {
+        if (proxyRes.headers['content-type']?.includes('text/event-stream')) {
+          // Tell nginx not to buffer this response
+          proxyRes.headers['x-accel-buffering'] = 'no';
+          proxyRes.headers['cache-control'] = 'no-cache';
+        }
+      },
+    },
   }),
 );
 
