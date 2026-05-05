@@ -7,7 +7,7 @@
     "start:aws": "ng serve --configuration aws",
     "build": "ng build",
     "build:dev": "ng build --configuration development",
-    "build:aws": "ng build --configuration aws",
+    "build:aws": "ng build --configuration aws --ssr",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:toxic-bet-fe": "node dist/toxic-bet-fe/server/server.mjs"
@@ -24,7 +24,7 @@
     "@angular/router": "^21.2.0",
     "@angular/service-worker": "^21.2.0",
     "@angular/ssr": "^21.2.8",
-    "express": "^5.1.0",
+    "express": "^4.18.2",
     "http-proxy-middleware": "^3.0.5",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0"

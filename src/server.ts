@@ -92,8 +92,3 @@ app.listen(port, '0.0.0.0', (error?: Error) => {
   }
   console.log(`Node Express server listening on port ${port}`);
 });
-
-/**
- * Request handler used by the Angular CLI (for dev-server and during build) or Firebase Cloud Functions.
- */
-export const reqHandler = createNodeRequestHandler(app);
