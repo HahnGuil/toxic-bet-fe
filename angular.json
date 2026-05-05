@@ -9,7 +9,6 @@
   "projects": {
     "toxic-bet-fe": {
       "projectType": "application",
-      "schematics": {},
       "root": "",
       "sourceRoot": "src",
       "prefix": "app",
@@ -19,6 +18,9 @@
           "options": {
             "browser": "src/main.ts",
             "tsConfig": "tsconfig.app.json",
+
+            "index": "src/index.html",
+
             "assets": [
               {
                 "glob": "**/*",
@@ -26,16 +28,28 @@
               }
             ],
             "styles": ["src/styles.css"],
+
             "server": "src/main.server.ts",
+
             "security": {
-              "allowedHosts": ["localhost", "127.0.0.1", "192.168.0.221", "192.168.0.222", "toxicbet.com.br", "www.toxicbet.com.br"]
+              "allowedHosts": [
+                "localhost",
+                "127.0.0.1",
+                "192.168.0.221",
+                "192.168.0.222",
+                "toxicbet.com.br",
+                "www.toxicbet.com.br"
+              ]
             },
+
             "ssr": {
               "entry": "src/server.ts"
             }
           },
           "configurations": {
             "production": {
+              "outputHashing": "all",
+              "serviceWorker": "ngsw-config.json",
               "budgets": [
                 {
                   "type": "initial",
@@ -47,9 +61,7 @@
                   "maximumWarning": "4kB",
                   "maximumError": "8kB"
                 }
-              ],
-              "outputHashing": "all",
-              "serviceWorker": "ngsw-config.json"
+              ]
             },
             "development": {
               "optimization": false,
@@ -75,10 +87,18 @@
           },
           "defaultConfiguration": "production"
         },
+
         "serve": {
           "builder": "@angular/build:dev-server",
           "options": {
-            "allowedHosts": ["localhost", "127.0.0.1", "192.168.0.221", "192.168.0.222", "toxicbet.com.br", "www.toxicbet.com.br"]
+            "allowedHosts": [
+              "localhost",
+              "127.0.0.1",
+              "192.168.0.221",
+              "192.168.0.222",
+              "toxicbet.com.br",
+              "www.toxicbet.com.br"
+            ]
           },
           "configurations": {
             "production": {
@@ -93,6 +113,7 @@
           },
           "defaultConfiguration": "development"
         },
+
         "test": {
           "builder": "@angular/build:unit-test"
         }
