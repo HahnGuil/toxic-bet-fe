@@ -3,12 +3,12 @@
     <div class="teams-row">
       <div class="team-box">
         <span class="team-name">{{ bet().homeTeamName }}</span>
-        <span class="team-score">{{ bet().homeTeamScore }}</span>
       </div>
+      <span class="team-score team-score--home">{{ bet().homeTeamScore }}</span>
       <span class="teams-separator" aria-hidden="true">X</span>
+      <span class="team-score team-score--visiting">{{ bet().visitingTeamScore }}</span>
       <div class="team-box">
         <span class="team-name">{{ bet().visitingTeamName }}</span>
-        <span class="team-score">{{ bet().visitingTeamScore }}</span>
       </div>
     </div>
 
