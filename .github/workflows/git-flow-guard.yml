@@ -11,6 +11,11 @@ jobs:
     name: validate
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout source branch
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
       - name: Validate branch flow
         env:
           BASE_REF: ${{ github.base_ref }}
@@ -18,6 +23,13 @@ jobs:
           ACTOR: ${{ github.actor }}
         run: |
           set -euo pipefail
+          git fetch origin main
+          if ! git merge-base --is-ancestor origin/main HEAD; then
+            echo "The source branch must be up to date with main before it can be merged."
+            echo "Update it with: git fetch origin && git rebase origin/main"
+            exit 1
+          fi
+
           if [ "$BASE_REF" = "main" ]; then
             if [ "$HEAD_REF" != "development" ]; then
               echo "Only development can be merged into main. Current source: $HEAD_REF"
