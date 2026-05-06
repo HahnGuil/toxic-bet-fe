@@ -37,7 +37,13 @@ if [[ ! "${IMAGE}" =~ ^ghcr\.io/hahnguil/${REPO}:[A-Za-z0-9_.:-]+$ ]]; then
 fi
 
 echo "Deploying ${IMAGE} sha=${SHA:-unknown}"
-sudo k3s ctr images pull "${IMAGE}"
+PULL_ARGS=()
+if [[ -s /opt/toxicbet/deploy-webhook/ghcr-username && -s /opt/toxicbet/deploy-webhook/ghcr-token ]]; then
+  GHCR_USERNAME=$(sudo cat /opt/toxicbet/deploy-webhook/ghcr-username)
+  GHCR_TOKEN=$(sudo cat /opt/toxicbet/deploy-webhook/ghcr-token)
+  PULL_ARGS=(--user "${GHCR_USERNAME}:${GHCR_TOKEN}")
+fi
+sudo k3s ctr images pull "${PULL_ARGS[@]}" "${IMAGE}"
 sudo k3s kubectl -n "${NAMESPACE}" set image "deployment/${DEPLOYMENT}" "${CONTAINER}=${IMAGE}"
 
 if sudo k3s kubectl -n "${NAMESPACE}" rollout status "deployment/${DEPLOYMENT}" --timeout="${TIMEOUT}"; then
