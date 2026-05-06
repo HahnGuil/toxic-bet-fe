@@ -59,3 +59,12 @@ sudo kubectl apply -f /opt/toxicbet/k8s
 
 The Postgres containers can keep running in Docker. The application pods reach
 them through the EC2 private IP and the existing published ports.
+
+If GHCR packages are private, store pull credentials on the EC2 instance:
+
+```sh
+sudo install -d -m 700 /opt/toxicbet/deploy-webhook
+printf '%s' 'github-user' | sudo tee /opt/toxicbet/deploy-webhook/ghcr-username
+printf '%s' 'github-token-with-read-packages' | sudo tee /opt/toxicbet/deploy-webhook/ghcr-token
+sudo chmod 600 /opt/toxicbet/deploy-webhook/ghcr-username /opt/toxicbet/deploy-webhook/ghcr-token
+```
