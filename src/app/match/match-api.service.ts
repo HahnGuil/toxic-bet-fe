@@ -12,6 +12,8 @@ export type CloseMatchResult = 'HOME_WIN' | 'DRAW' | 'VISITING_WIN';
 export interface CloseMatchRequest {
   matchId: number;
   result: CloseMatchResult;
+  homeTeamScore: number;
+  visitingTeamScore: number;
 }
 
 export type MatchResult =
@@ -33,6 +35,8 @@ export interface MatchResponse {
   homeTeamOdds: number;
   visitingTeamOdds: number;
   drawTeamOdds: number;
+  homeTeamScore?: number | null;
+  visitingTeamScore?: number | null;
 }
 
 @Injectable({ providedIn: 'root' })

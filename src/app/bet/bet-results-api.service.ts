@@ -15,6 +15,9 @@ export interface BetResultDTO {
   matchResult: MatchResult;
   betResult: MatchResult;
   betOdds: number;
+  betPoints: number;
+  homeTeamScore: number;
+  visitingTeamScore: number;
   winner: boolean;
 }
 

@@ -11,6 +11,15 @@ import { CloseMatchResult } from '../match/match-api.service';
 interface MatchSelection {
   checked: boolean;
   result: CloseMatchResult | null;
+  homeTeamScore: number | null;
+  visitingTeamScore: number | null;
+}
+
+interface ValidMatchSelection {
+  checked: boolean;
+  result: CloseMatchResult;
+  homeTeamScore: number;
+  visitingTeamScore: number;
 }
 
 @Component({
@@ -77,7 +86,12 @@ export class Admin implements OnDestroy {
   protected onCardStateChange(state: AdminMatchCardState): void {
     this.selections.update((map) => {
       const next = new Map(map);
-      next.set(state.matchId, { checked: state.checked, result: state.result });
+      next.set(state.matchId, {
+        checked: state.checked,
+        result: state.result,
+        homeTeamScore: state.homeTeamScore,
+        visitingTeamScore: state.visitingTeamScore,
+      });
       return next;
     });
     // Clear error for this card once user interacts
@@ -101,10 +115,15 @@ export class Admin implements OnDestroy {
 
     for (const [matchId, sel] of this.selections()) {
       if (!sel.checked) continue;
-      if (!sel.result) {
+      if (!this.isValidSelection(sel)) {
         invalidIds.add(matchId);
       } else {
-        payload.push({ matchId, result: sel.result });
+        payload.push({
+          matchId,
+          result: sel.result,
+          homeTeamScore: sel.homeTeamScore,
+          visitingTeamScore: sel.visitingTeamScore,
+        });
       }
     }
 
@@ -138,5 +157,14 @@ export class Admin implements OnDestroy {
     this.streamSub?.unsubscribe();
     this.submitSub?.unsubscribe();
   }
-}
 
+  private isValidSelection(sel: MatchSelection): sel is ValidMatchSelection {
+    if (!sel.result || sel.homeTeamScore === null || sel.visitingTeamScore === null) {
+      return false;
+    }
+
+    if (sel.result === 'HOME_WIN') return sel.homeTeamScore > sel.visitingTeamScore;
+    if (sel.result === 'VISITING_WIN') return sel.homeTeamScore < sel.visitingTeamScore;
+    return sel.homeTeamScore === sel.visitingTeamScore;
+  }
+}

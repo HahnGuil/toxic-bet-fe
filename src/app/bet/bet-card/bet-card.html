@@ -3,16 +3,24 @@
     <div class="teams-row">
       <div class="team-box">
         <span class="team-name">{{ bet().homeTeamName }}</span>
+        <span class="team-score">{{ bet().homeTeamScore }}</span>
       </div>
       <span class="teams-separator" aria-hidden="true">X</span>
       <div class="team-box">
         <span class="team-name">{{ bet().visitingTeamName }}</span>
+        <span class="team-score">{{ bet().visitingTeamScore }}</span>
       </div>
     </div>
 
-    <div class="odds-row">
-      <span class="odds-label">ODD DA APOSTA</span>
-      <span class="odds-value">{{ bet().betOdds }}</span>
+    <div class="bet-metrics-row">
+      <div class="bet-metric">
+        <span class="bet-metric-label">ODD DA APOSTA</span>
+        <span class="bet-metric-value">{{ bet().betOdds }}</span>
+      </div>
+      <div class="bet-metric">
+        <span class="bet-metric-label">PONTOS</span>
+        <span class="bet-metric-value">{{ bet().betPoints }}</span>
+      </div>
     </div>
 
     <div

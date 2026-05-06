@@ -23,6 +23,34 @@
       </div>
     </div>
 
+    <div class="score-row" aria-label="Placar da partida">
+      <label class="score-field">
+        <span class="score-label">MANDANTE</span>
+        <input
+          type="number"
+          class="score-input"
+          min="0"
+          inputmode="numeric"
+          [value]="homeTeamScore()"
+          (input)="onHomeScoreInput($event)"
+        />
+      </label>
+
+      <span class="score-separator" aria-hidden="true">X</span>
+
+      <label class="score-field">
+        <span class="score-label">VISITANTE</span>
+        <input
+          type="number"
+          class="score-input"
+          min="0"
+          inputmode="numeric"
+          [value]="visitingTeamScore()"
+          (input)="onVisitingScoreInput($event)"
+        />
+      </label>
+    </div>
+
     <div class="result-radio-group" role="radiogroup" [attr.aria-label]="'Resultado da partida ' + match().homeTeamName + ' x ' + match().visitingTeamName">
       <label class="result-radio-label" [class.result-radio-label--selected]="selectedResult() === 'HOME_WIN'">
         <input
@@ -65,7 +93,7 @@
     </div>
 
     @if (invalid()) {
-      <p class="result-error-msg" role="alert">É preciso informar um resultado</p>
+      <p class="result-error-msg" role="alert">Informe resultado e placar coerentes</p>
     }
   </div>
 </article>
