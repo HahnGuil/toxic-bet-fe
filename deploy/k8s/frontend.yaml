@@ -4,9 +4,9 @@ metadata:
   name: toxic-bet-fe
   namespace: toxicbet
   labels:
-    app.kubernetes.io/name: toxic-bet-fe
+    app: toxic-bet-fe
 spec:
-  replicas: 2
+  replicas: 1
   revisionHistoryLimit: 5
   strategy:
     type: RollingUpdate
@@ -15,11 +15,11 @@ spec:
       maxUnavailable: 0
   selector:
     matchLabels:
-      app.kubernetes.io/name: toxic-bet-fe
+      app: toxic-bet-fe
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: toxic-bet-fe
+        app: toxic-bet-fe
     spec:
       containers:
         - name: toxic-bet-fe
@@ -66,11 +66,11 @@ metadata:
   name: toxic-bet-fe
   namespace: toxicbet
   labels:
-    app.kubernetes.io/name: toxic-bet-fe
+    app: toxic-bet-fe
 spec:
   type: LoadBalancer
   selector:
-    app.kubernetes.io/name: toxic-bet-fe
+    app: toxic-bet-fe
   ports:
     - name: http
       port: 4200

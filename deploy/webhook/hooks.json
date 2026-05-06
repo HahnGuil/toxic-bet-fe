@@ -1,10 +1,14 @@
 [
   {
     "id": "toxic-bet-fe-deploy",
-    "execute-command": "/opt/toxicbet/bin/deploy-from-webhook.sh",
-    "command-working-directory": "/opt/toxicbet",
-    "response-message": "Deploy triggered",
+    "execute-command": "/opt/toxicbet/deploy-webhook/deploy.sh",
+    "command-working-directory": "/opt/toxicbet/deploy-webhook",
+    "include-command-output-in-response": true,
     "pass-arguments-to-command": [
+      {
+        "source": "payload",
+        "name": "deployment"
+      },
       {
         "source": "payload",
         "name": "image"

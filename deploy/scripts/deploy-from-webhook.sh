@@ -1,28 +1,47 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-IMAGE="${1:-}"
-SHA="${2:-}"
+DEPLOYMENT="${1:-}"
+IMAGE="${2:-}"
+SHA="${3:-}"
 NAMESPACE="${NAMESPACE:-toxicbet}"
-DEPLOYMENT="${DEPLOYMENT:-toxic-bet-fe}"
-CONTAINER="${CONTAINER:-toxic-bet-fe}"
-TIMEOUT="${ROLLOUT_TIMEOUT:-180s}"
+TIMEOUT="${ROLLOUT_TIMEOUT:-240s}"
+
+case "${DEPLOYMENT}" in
+  toxic-bet-fe)
+    CONTAINER="toxic-bet-fe"
+    REPO="toxic-bet-fe"
+    ;;
+  toxic-bet-api)
+    CONTAINER="toxic-bet-api"
+    REPO="toxic-bet"
+    ;;
+  ms-auth-server)
+    CONTAINER="ms-auth-server"
+    REPO="ms-auth-server"
+    ;;
+  *)
+    echo "Invalid deployment: ${DEPLOYMENT}" >&2
+    exit 1
+    ;;
+esac
 
 if [[ -z "${IMAGE}" ]]; then
   echo "Missing image argument" >&2
   exit 1
 fi
 
-if [[ ! "${IMAGE}" =~ ^ghcr\.io/[A-Za-z0-9_.-]+/toxic-bet-fe:[A-Za-z0-9_.:-]+$ ]]; then
-  echo "Refusing unexpected image: ${IMAGE}" >&2
+if [[ ! "${IMAGE}" =~ ^ghcr\.io/hahnguil/${REPO}:[A-Za-z0-9_.:-]+$ ]]; then
+  echo "Refusing unexpected image for ${DEPLOYMENT}: ${IMAGE}" >&2
   exit 1
 fi
 
 echo "Deploying ${IMAGE} sha=${SHA:-unknown}"
-kubectl -n "${NAMESPACE}" set image "deployment/${DEPLOYMENT}" "${CONTAINER}=${IMAGE}"
+sudo k3s ctr images pull "${IMAGE}"
+sudo k3s kubectl -n "${NAMESPACE}" set image "deployment/${DEPLOYMENT}" "${CONTAINER}=${IMAGE}"
 
-if kubectl -n "${NAMESPACE}" rollout status "deployment/${DEPLOYMENT}" --timeout="${TIMEOUT}"; then
-  kubectl -n "${NAMESPACE}" annotate "deployment/${DEPLOYMENT}" \
+if sudo k3s kubectl -n "${NAMESPACE}" rollout status "deployment/${DEPLOYMENT}" --timeout="${TIMEOUT}"; then
+  sudo k3s kubectl -n "${NAMESPACE}" annotate "deployment/${DEPLOYMENT}" \
     toxicbet.com/last-deployed-image="${IMAGE}" \
     toxicbet.com/last-deployed-sha="${SHA:-unknown}" \
     --overwrite
@@ -31,6 +50,6 @@ if kubectl -n "${NAMESPACE}" rollout status "deployment/${DEPLOYMENT}" --timeout
 fi
 
 echo "Deployment did not become healthy. Rolling back." >&2
-kubectl -n "${NAMESPACE}" rollout undo "deployment/${DEPLOYMENT}"
-kubectl -n "${NAMESPACE}" rollout status "deployment/${DEPLOYMENT}" --timeout="${TIMEOUT}"
+sudo k3s kubectl -n "${NAMESPACE}" rollout undo "deployment/${DEPLOYMENT}"
+sudo k3s kubectl -n "${NAMESPACE}" rollout status "deployment/${DEPLOYMENT}" --timeout="${TIMEOUT}"
 exit 1
