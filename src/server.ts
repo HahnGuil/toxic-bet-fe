@@ -17,6 +17,10 @@ const angularApp = new AngularNodeAppEngine({
   trustProxyHeaders: ['x-forwarded-for', 'x-forwarded-proto', 'x-forwarded-port'],
 });
 
+app.get('/healthz', (_req, res) => {
+  res.status(204).end();
+});
+
 /**
  * Terminal logging endpoint — receives structured log entries from the Angular client.
  */
