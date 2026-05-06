@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, computed, input, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, computed, input, output, signal } from '@angular/core';
 
 import { environment } from '../../../environments/environment';
 import { BettingPoolResponse } from '../betting-pool-api.service';
@@ -14,6 +14,8 @@ const VISIBLE_LIMIT = 5;
 })
 export class BettingPoolCard implements OnDestroy {
   readonly pool = input.required<BettingPoolResponse>();
+  readonly leaving = input(false);
+  readonly leavePool = output<void>();
 
   protected readonly expanded = signal(false);
   protected readonly shareModalOpen = signal(false);
@@ -60,8 +62,12 @@ export class BettingPoolCard implements OnDestroy {
     this.expanded.set(false);
   }
 
+  protected requestLeave(): void {
+    if (this.leaving()) return;
+    this.leavePool.emit();
+  }
+
   ngOnDestroy(): void {
     if (this.copyResetTimer) clearTimeout(this.copyResetTimer);
   }
 }
-

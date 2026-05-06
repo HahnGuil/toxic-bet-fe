@@ -19,7 +19,11 @@
           <p class="bp-empty-state">Você ainda não está em nenhum bolão, <br>crie ou peça o código para entrar em um.</p>
         }
         @for (pool of pools(); track pool.bettingPoolId) {
-          <app-betting-pool-card [pool]="pool" />
+          <app-betting-pool-card
+            [pool]="pool"
+            [leaving]="isLeavingPool(pool.bettingPoolKey)"
+            (leavePool)="leavePool(pool)"
+          />
         }
       </div>
     </div>

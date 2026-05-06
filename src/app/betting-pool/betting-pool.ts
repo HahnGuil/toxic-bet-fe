@@ -20,6 +20,7 @@ export class BettingPool implements OnDestroy {
 
   protected readonly isPageTransitioning = signal(false);
   protected readonly pools = signal<BettingPoolResponse[]>([]);
+  protected readonly leavingPoolKeys = signal<Set<string>>(new Set());
 
   protected readonly joinModalOpen = signal(false);
   protected readonly joinKey = signal('');
@@ -34,10 +35,7 @@ export class BettingPool implements OnDestroy {
   private sub: Subscription | null = null;
 
   constructor() {
-    this.sub = this.api.getUserPools().subscribe({
-      next: (data) => this.pools.set(data),
-      error: () => this.pools.set([]),
-    });
+    this.loadPools();
   }
 
   ngOnDestroy(): void {
@@ -63,11 +61,7 @@ export class BettingPool implements OnDestroy {
       next: () => {
         this.isCreating.set(false);
         this.closeCreateModal();
-        this.sub?.unsubscribe();
-        this.sub = this.api.getUserPools().subscribe({
-          next: (data) => this.pools.set(data),
-          error: () => {},
-        });
+        this.loadPools();
       },
       error: (err) => {
         this.isCreating.set(false);
@@ -97,11 +91,7 @@ export class BettingPool implements OnDestroy {
       next: () => {
         this.isJoining.set(false);
         this.closeJoinModal();
-        this.sub?.unsubscribe();
-        this.sub = this.api.getUserPools().subscribe({
-          next: (data) => this.pools.set(data),
-          error: () => {},
-        });
+        this.loadPools();
       },
       error: (err) => {
         this.isJoining.set(false);
@@ -111,5 +101,42 @@ export class BettingPool implements OnDestroy {
       },
     });
   }
-}
 
+  protected isLeavingPool(bettingPoolKey: string): boolean {
+    return this.leavingPoolKeys().has(bettingPoolKey);
+  }
+
+  protected leavePool(pool: BettingPoolResponse): void {
+    if (this.isLeavingPool(pool.bettingPoolKey)) return;
+
+    const confirmed = window.confirm(`Deseja sair do bolão "${pool.bettingPoolName}"?`);
+    if (!confirmed) return;
+
+    this.leavingPoolKeys.update((current) => new Set(current).add(pool.bettingPoolKey));
+    this.api.leavePool(pool.bettingPoolKey).subscribe({
+      next: () => {
+        this.leavingPoolKeys.update((current) => {
+          const next = new Set(current);
+          next.delete(pool.bettingPoolKey);
+          return next;
+        });
+        this.loadPools();
+      },
+      error: () => {
+        this.leavingPoolKeys.update((current) => {
+          const next = new Set(current);
+          next.delete(pool.bettingPoolKey);
+          return next;
+        });
+      },
+    });
+  }
+
+  private loadPools(): void {
+    this.sub?.unsubscribe();
+    this.sub = this.api.getUserPools().subscribe({
+      next: (data) => this.pools.set(data),
+      error: () => this.pools.set([]),
+    });
+  }
+}

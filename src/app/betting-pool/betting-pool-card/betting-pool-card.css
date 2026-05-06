@@ -77,14 +77,48 @@
   background: #115e59;
   color: #fff;
   padding: 0.47rem 1rem;
-  text-align: center;
+  display: grid;
+  grid-template-columns: 1.75rem 1fr 1.75rem;
+  align-items: center;
 }
 
 .pool-card-title {
+  grid-column: 2;
+  text-align: center;
   font-size: 0.82rem;
   font-weight: 700;
   letter-spacing: 0.05em;
   text-transform: uppercase;
+}
+
+.pool-leave-btn {
+  grid-column: 3;
+  width: 1.75rem;
+  height: 1.75rem;
+  border: none;
+  background: transparent;
+  color: #ccfbf1;
+  cursor: pointer;
+  display: inline-grid;
+  place-items: center;
+  border-radius: 0.35rem;
+  padding: 0;
+  transition: background 120ms, color 120ms, opacity 120ms;
+}
+
+.pool-leave-btn svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.pool-leave-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.14);
+  color: #fff;
+}
+
+.pool-leave-btn:disabled {
+  cursor: default;
+  opacity: 0.45;
 }
 
 /* Body */
@@ -251,4 +285,3 @@
   font-weight: 700;
   white-space: nowrap;
 }
-

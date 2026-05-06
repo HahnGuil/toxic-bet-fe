@@ -39,6 +39,14 @@ export class BettingPoolApiService {
     return this.http.patch<unknown>(`${this.baseUrl}/${bettingPoolKey}`, null, { headers });
   }
 
+  leavePool(bettingPoolKey: string): Observable<unknown> {
+    const token = this.authSessionService.getAccessToken();
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token ?? ''}`,
+    });
+    return this.http.delete<unknown>(`${this.baseUrl}/${bettingPoolKey}`, { headers });
+  }
+
   createPool(bettingPoolName: string): Observable<unknown> {
     const token = this.authSessionService.getAccessToken();
     const headers = new HttpHeaders({

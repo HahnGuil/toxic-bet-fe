@@ -28,6 +28,18 @@
   <!-- Classification header -->
   <header class="pool-card-header">
     <span class="pool-card-title">Classificação</span>
+    <button
+      type="button"
+      class="pool-leave-btn"
+      [disabled]="leaving()"
+      aria-label="Sair do bolão"
+      title="Sair do bolão"
+      (click)="requestLeave()"
+    >
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path fill="currentColor" d="M10 17v-2h4V9h-4V7h6v10h-6zm-1.41-1.41L7.17 17 2.17 12l5-5 1.42 1.41L6 11h8v2H6l2.59 2.59zM18 19V5h2v14h-2z"/>
+      </svg>
+    </button>
   </header>
 
   <!-- Table -->
