@@ -6,5 +6,5 @@ metadata:
 data:
   NODE_ENV: production
   PORT: "4000"
-  API_TARGET: http://172.31.41.196:20000
-  AUTH_TARGET: http://172.31.41.196:2300
+  API_TARGET: http://toxic-bet-api:20000
+  AUTH_TARGET: http://ms-auth-server:2300

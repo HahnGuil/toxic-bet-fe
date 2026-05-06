@@ -1,4 +1,4 @@
-name: Build and deploy frontend
+name: Build and deploy toxic-bet-fe
 
 on:
   push:
@@ -68,6 +68,7 @@ jobs:
           DEPLOY_WEBHOOK_TOKEN: ${{ secrets.DEPLOY_WEBHOOK_TOKEN }}
           IMAGE: ${{ needs.build.outputs.image }}
           SHA: ${{ github.sha }}
+          DEPLOYMENT: toxic-bet-fe
         run: |
           test -n "$DEPLOY_WEBHOOK_URL"
           test -n "$DEPLOY_WEBHOOK_TOKEN"
@@ -75,4 +76,4 @@ jobs:
             --request POST "$DEPLOY_WEBHOOK_URL" \
             --header "Content-Type: application/json" \
             --header "X-Deploy-Token: $DEPLOY_WEBHOOK_TOKEN" \
-            --data "{\"image\":\"$IMAGE\",\"sha\":\"$SHA\",\"repository\":\"$GITHUB_REPOSITORY\",\"run_url\":\"$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID\"}"
+            --data "{\"deployment\":\"$DEPLOYMENT\",\"image\":\"$IMAGE\",\"sha\":\"$SHA\",\"repository\":\"$GITHUB_REPOSITORY\",\"run_url\":\"$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID\"}"
