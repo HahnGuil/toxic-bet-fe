@@ -1,0 +1,40 @@
+name: Git Flow Guard
+
+on:
+  pull_request:
+    branches:
+      - main
+      - development
+
+jobs:
+  validate:
+    name: validate
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate branch flow
+        env:
+          BASE_REF: ${{ github.base_ref }}
+          HEAD_REF: ${{ github.head_ref }}
+          ACTOR: ${{ github.actor }}
+        run: |
+          set -euo pipefail
+          if [ "$BASE_REF" = "main" ]; then
+            if [ "$HEAD_REF" != "development" ]; then
+              echo "Only development can be merged into main. Current source: $HEAD_REF"
+              exit 1
+            fi
+            if [ "$ACTOR" != "HahnGuil" ]; then
+              echo "Only HahnGuil can open production merge requests. Current actor: $ACTOR"
+              exit 1
+            fi
+          fi
+
+          if [ "$BASE_REF" = "development" ]; then
+            case "$HEAD_REF" in
+              feature/*) ;;
+              *)
+                echo "Only feature/* branches can be merged into development. Current source: $HEAD_REF"
+                exit 1
+                ;;
+            esac
+          fi
