@@ -1,0 +1,32 @@
+[
+  {
+    "id": "toxic-bet-fe-deploy",
+    "execute-command": "/opt/toxicbet/deploy-webhook/deploy.sh",
+    "command-working-directory": "/opt/toxicbet/deploy-webhook",
+    "include-command-output-in-response": true,
+    "pass-arguments-to-command": [
+      {
+        "source": "payload",
+        "name": "deployment"
+      },
+      {
+        "source": "payload",
+        "name": "image"
+      },
+      {
+        "source": "payload",
+        "name": "sha"
+      }
+    ],
+    "trigger-rule": {
+      "match": {
+        "type": "value",
+        "value": "__DEPLOY_WEBHOOK_TOKEN__",
+        "parameter": {
+          "source": "header",
+          "name": "X-Deploy-Token"
+        }
+      }
+    }
+  }
+]

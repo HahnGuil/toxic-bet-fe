@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: toxic-bet-fe-config
+  namespace: toxicbet
+data:
+  NODE_ENV: production
+  PORT: "4000"
+  API_TARGET: http://toxic-bet-api:20000
+  AUTH_TARGET: http://ms-auth-server:2300
