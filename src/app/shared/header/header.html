@@ -7,27 +7,46 @@
     <span class="brand-text">TOXIC BET</span>
   </div>
 
-  <button
-    type="button"
-    class="logoff-link"
-    aria-label="Sair"
-    title="Sair"
-    [disabled]="isLoggingOut()"
-    (click)="logoff()"
-  >
-    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-      <path
-        fill="currentColor"
-        d="M3 3h10a2 2 0 0 1 2 2v3h-2V5H5v14h8v-3h2v3a2 2 0 0 1-2 2H3z"
-      />
-      <path
-        fill="currentColor"
-        d="M13 12.5c0-1.93 1.57-3.5 3.5-3.5A3.5 3.5 0 0 1 20 12.5v1.2h1a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1h-9a1 1 0 0 1-1-1v-5.3a1 1 0 0 1 1-1h1zm2 1.2h3v-1.2a1.5 1.5 0 0 0-3 0z"
-      />
-      <path
-        fill="currentColor"
-        d="M8 11h7v2H8l2.2 2.2-1.4 1.4L4.2 12l4.6-4.6 1.4 1.4z"
-      />
-    </svg>
-  </button>
+  <div class="header-actions">
+    @if (pushNotifications.isSupported()) {
+      <button
+        type="button"
+        class="header-action"
+        [class.header-action-active]="pushNotifications.isSubscribed()"
+        [attr.aria-label]="pushNotifications.isSubscribed() ? 'Desativar notificações' : 'Ativar notificações'"
+        [attr.title]="pushNotifications.isSubscribed() ? 'Desativar notificações' : 'Ativar notificações'"
+        [disabled]="pushNotifications.isBusy()"
+        (click)="toggleNotifications()"
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path fill="currentColor" d="M12 22a2.6 2.6 0 0 0 2.45-1.75h-4.9A2.6 2.6 0 0 0 12 22" />
+          <path fill="currentColor" d="M19 17h-1V10a6 6 0 0 0-4.5-5.8V3a1.5 1.5 0 0 0-3 0v1.2A6 6 0 0 0 6 10v7H5a1 1 0 1 0 0 2h14a1 1 0 1 0 0-2M8 17v-7a4 4 0 0 1 8 0v7z" />
+        </svg>
+      </button>
+    }
+
+    <button
+      type="button"
+      class="header-action"
+      aria-label="Sair"
+      title="Sair"
+      [disabled]="isLoggingOut()"
+      (click)="logoff()"
+    >
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path
+          fill="currentColor"
+          d="M3 3h10a2 2 0 0 1 2 2v3h-2V5H5v14h8v-3h2v3a2 2 0 0 1-2 2H3z"
+        />
+        <path
+          fill="currentColor"
+          d="M13 12.5c0-1.93 1.57-3.5 3.5-3.5A3.5 3.5 0 0 1 20 12.5v1.2h1a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1h-9a1 1 0 0 1-1-1v-5.3a1 1 0 0 1 1-1h1zm2 1.2h3v-1.2a1.5 1.5 0 0 0-3 0z"
+        />
+        <path
+          fill="currentColor"
+          d="M8 11h7v2H8l2.2 2.2-1.4 1.4L4.2 12l4.6-4.6 1.4 1.4z"
+        />
+      </svg>
+    </button>
+  </div>
 </header>
