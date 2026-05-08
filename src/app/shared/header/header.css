@@ -31,7 +31,13 @@
   font-size: 1rem;
 }
 
-.logoff-link {
+.header-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.header-action {
   width: 2rem;
   height: 2rem;
   border: 0;
@@ -45,17 +51,22 @@
   transition: background-color 140ms ease, transform 140ms ease;
 }
 
-.logoff-link svg {
+.header-action svg {
   width: 1.15rem;
   height: 1.15rem;
 }
 
-.logoff-link:hover:not(:disabled) {
+.header-action:hover:not(:disabled) {
   background: rgb(255 255 255 / 0.26);
   transform: translateX(1px);
 }
 
-.logoff-link:disabled {
+.header-action-active {
+  background: #facc15;
+  color: #11312e;
+}
+
+.header-action:disabled {
   opacity: 0.6;
   cursor: wait;
 }
