@@ -1,5 +1,3 @@
-
-
 import { ChangeDetectionStrategy, Component, inject, signal, computed, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Subscription, timer } from 'rxjs';
@@ -9,9 +7,10 @@ import { MatchApiService, MatchResponse } from './match-api.service';
 import { BetApiService } from './bet-api.service';
 import { MatchCard } from './match-card/match-card';
 import { LoggerService } from '../logger.service';
+import { PushNotificationService } from '../notifications/push-notification.service';
 import { AppFooter } from '../shared/footer/footer';
 import { AppHeader } from '../shared/header/header';
-import { AppDropdown, DropdownOption } from '../shared/dropdown/dropdown';
+import { AppDropdown } from '../shared/dropdown/dropdown';
 
 @Component({
   selector: 'app-match',
@@ -26,6 +25,7 @@ export class Match implements OnDestroy {
   private readonly matchApi = inject(MatchApiService);
   private readonly betApi = inject(BetApiService);
   private readonly logger = inject(LoggerService);
+  protected readonly pushNotifications = inject(PushNotificationService);
 
   protected readonly championships = signal<Championship[]>([]);
   protected readonly selectedChampionship = signal<Championship | null>(null);
@@ -40,6 +40,13 @@ export class Match implements OnDestroy {
   protected readonly matches = signal<MatchResponse[]>([]);
   protected readonly openMatches = signal<MatchResponse[]>([]);
   protected readonly bettedMatchIds = signal<Set<number>>(new Set());
+  protected readonly notificationBannerDismissed = signal(false);
+
+  protected readonly showNotificationBanner = computed(() =>
+    this.pushNotifications.isSupported()
+    && !this.pushNotifications.isSubscribed()
+    && !this.notificationBannerDismissed()
+  );
 
   protected readonly filteredOpenMatches = computed(() => {
     const betted = this.bettedMatchIds();
@@ -51,6 +58,7 @@ export class Match implements OnDestroy {
   private userBetsSub: Subscription | null = null;
 
   constructor() {
+    this.pushNotifications.initialize();
     this.loadChampionships();
     this.loadActiveMatchStream();
     this.loadUserBetsSnapshot();
@@ -144,6 +152,18 @@ export class Match implements OnDestroy {
       matchId,
       removedFromOpenToBet: wasInOpenList,
     });
+  }
+
+  protected enableNotifications(): void {
+    this.pushNotifications.enable().subscribe((enabled) => {
+      if (!enabled) {
+        this.logger.error('[Notifications] user did not enable push notifications');
+      }
+    });
+  }
+
+  protected dismissNotificationBanner(): void {
+    this.notificationBannerDismissed.set(true);
   }
 
   protected loadChampionships(): void {
