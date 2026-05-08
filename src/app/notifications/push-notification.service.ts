@@ -26,16 +26,18 @@ export class PushNotificationService {
   private readonly http = inject(HttpClient);
   private readonly swPush = inject(SwPush);
   private readonly baseUrl = `${environment.toxicBetApiBaseUrl}/notifications`;
+  private initialized = false;
 
   readonly isSubscribed = signal(false);
   readonly isBusy = signal(false);
   readonly isSupported = signal(this.swPush.isEnabled);
 
   initialize(): void {
-    if (!this.swPush.isEnabled) {
+    if (this.initialized || !this.swPush.isEnabled) {
       return;
     }
 
+    this.initialized = true;
     this.swPush.subscription.subscribe((subscription) => {
       this.isSubscribed.set(!!subscription);
     });

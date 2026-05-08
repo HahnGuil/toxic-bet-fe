@@ -57,6 +57,93 @@
   margin: 0;
 }
 
+.notification-opt-in {
+  width: min(100%, 32rem);
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.85rem 0.9rem;
+  border: 1px solid #99f6e4;
+  border-radius: 0.5rem;
+  background: #ecfeff;
+  color: #134e4a;
+  box-shadow: 0 0.5rem 1.2rem rgb(15 23 42 / 0.08);
+}
+
+.notification-opt-in-copy {
+  display: grid;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.notification-opt-in-copy strong {
+  font-size: 0.95rem;
+  line-height: 1.15;
+}
+
+.notification-opt-in-copy span {
+  font-size: 0.84rem;
+  line-height: 1.25;
+  color: #475569;
+}
+
+.notification-opt-in-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.notification-opt-in-button,
+.notification-opt-in-dismiss {
+  border: 0;
+  display: inline-grid;
+  place-items: center;
+  cursor: pointer;
+  transition: background-color 140ms ease, transform 140ms ease;
+}
+
+.notification-opt-in-button {
+  min-height: 2rem;
+  padding: 0 0.85rem;
+  border-radius: 0.45rem;
+  background: #115e59;
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.86rem;
+}
+
+.notification-opt-in-dismiss {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 999px;
+  background: transparent;
+  color: #0f766e;
+}
+
+.notification-opt-in-dismiss svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.notification-opt-in-button:hover:not(:disabled),
+.notification-opt-in-dismiss:hover {
+  transform: translateY(-1px);
+}
+
+.notification-opt-in-button:hover:not(:disabled) {
+  background: #0f766e;
+}
+
+.notification-opt-in-dismiss:hover {
+  background: rgb(15 118 110 / 0.12);
+}
+
+.notification-opt-in-button:disabled {
+  opacity: 0.7;
+  cursor: wait;
+}
+
 .match-view-switcher {
   width: min(100%, 24rem);
   display: grid;
@@ -116,6 +203,15 @@
     min-height: 2.8rem;
     font-size: 0.95rem;
     padding: 0.4rem 0.5rem;
+  }
+
+  .notification-opt-in {
+    grid-template-columns: 1fr;
+    gap: 0.7rem;
+  }
+
+  .notification-opt-in-actions {
+    justify-content: space-between;
   }
 }
 
