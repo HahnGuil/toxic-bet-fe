@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 
 import { AuthService } from '../../register/services/auth.service';
 import { AuthSessionService } from '../../register/services/auth-session.service';
+import { PushNotificationService } from '../../notifications/push-notification.service';
 
 @Component({
   selector: 'app-header',
@@ -15,10 +16,23 @@ export class AppHeader {
   private readonly router = inject(Router);
   private readonly authService = inject(AuthService);
   private readonly authSessionService = inject(AuthSessionService);
+  protected readonly pushNotifications = inject(PushNotificationService);
 
   readonly startFadeOut = output<void>();
 
   protected readonly isLoggingOut = signal(false);
+
+  constructor() {
+    this.pushNotifications.initialize();
+  }
+
+  protected toggleNotifications(): void {
+    const action = this.pushNotifications.isSubscribed()
+      ? this.pushNotifications.disable()
+      : this.pushNotifications.enable();
+
+    action.subscribe();
+  }
 
   protected logoff(): void {
     if (this.isLoggingOut()) {
@@ -36,6 +50,7 @@ export class AppHeader {
 
     this.authService.logout(email).subscribe({
       next: async () => {
+        this.pushNotifications.disable().subscribe();
         this.authSessionService.clearSession();
         this.startFadeOut.emit();
         setTimeout(async () => {
