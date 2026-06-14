@@ -1,4 +1,11 @@
-import { ChangeDetectionStrategy, Component, inject, signal, computed, OnDestroy } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  signal,
+  computed,
+  OnDestroy,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Subscription, timer } from 'rxjs';
 import { retry } from 'rxjs/operators';
@@ -32,20 +39,21 @@ export class Match implements OnDestroy {
   protected readonly isLoadingChampionships = signal(false);
 
   protected readonly championshipOptions = computed(() =>
-    this.championships().map((c) => ({ value: String(c.idChampionship), label: c.name }))
+    this.championships().map((c) => ({ value: String(c.idChampionship), label: c.name })),
   );
   protected readonly selectedChampionshipValue = computed(() =>
-    this.selectedChampionship() ? String(this.selectedChampionship()!.idChampionship) : ''
+    this.selectedChampionship() ? String(this.selectedChampionship()!.idChampionship) : '',
   );
   protected readonly matches = signal<MatchResponse[]>([]);
   protected readonly openMatches = signal<MatchResponse[]>([]);
   protected readonly bettedMatchIds = signal<Set<number>>(new Set());
   protected readonly notificationBannerDismissed = signal(false);
 
-  protected readonly showNotificationBanner = computed(() =>
-    this.pushNotifications.isSupported()
-    && !this.pushNotifications.isSubscribed()
-    && !this.notificationBannerDismissed()
+  protected readonly showNotificationBanner = computed(
+    () =>
+      this.pushNotifications.isSupported() &&
+      !this.pushNotifications.isSubscribed() &&
+      !this.notificationBannerDismissed(),
   );
 
   protected readonly filteredOpenMatches = computed(() => {
@@ -99,7 +107,9 @@ export class Match implements OnDestroy {
   private loadOpenMatches(): void {
     this.openMatches.set([]);
     const source$ = this.selectedChampionship()
-      ? this.matchApi.streamOpenBettingMatchesByChampionship(this.selectedChampionship()!.idChampionship)
+      ? this.matchApi.streamOpenBettingMatchesByChampionship(
+          this.selectedChampionship()!.idChampionship,
+        )
       : this.matchApi.streamOpenBettingMatches();
 
     this.openMatchStreamSub = source$.pipe(this.retryStream()).subscribe({
@@ -121,9 +131,16 @@ export class Match implements OnDestroy {
     if (idx >= 0) {
       const updated = [...list];
       updated[idx] = match;
-      return updated;
+      return this.sortByMatchTime(updated);
     }
-    return [...list, match];
+    return this.sortByMatchTime([...list, match]);
+  }
+
+  private sortByMatchTime(list: MatchResponse[]): MatchResponse[] {
+    return [...list].sort((a, b) => {
+      const timeDiff = new Date(a.matchTime).getTime() - new Date(b.matchTime).getTime();
+      return timeDiff || a.matchId - b.matchId;
+    });
   }
 
   ngOnDestroy(): void {
@@ -137,7 +154,11 @@ export class Match implements OnDestroy {
     this.userBetsSub = this.betApi.loadUserBetsSnapshot().subscribe({
       next: (bet) => {
         if (bet.matchId != null) {
-          this.logger.info('[Stream:UserBets] bet received', { matchId: bet.matchId, result: bet.result, odds: bet.odds });
+          this.logger.info('[Stream:UserBets] bet received', {
+            matchId: bet.matchId,
+            result: bet.result,
+            odds: bet.odds,
+          });
           this.bettedMatchIds.update((current) => new Set([...current, bet.matchId!]));
         }
       },
@@ -180,18 +201,18 @@ export class Match implements OnDestroy {
     });
   }
 
-    protected onChampionshipChange(value: string): void {
-      if (!value) {
-        this.selectedChampionship.set(null);
-        this.loadActiveMatchStream();
-        return;
-      }
-      const id = Number(value);
-      const champ = this.championships().find((c: Championship) => c.idChampionship === id) || null;
-      if (champ) {
-        this.selectChampionship(champ);
-      }
+  protected onChampionshipChange(value: string): void {
+    if (!value) {
+      this.selectedChampionship.set(null);
+      this.loadActiveMatchStream();
+      return;
     }
+    const id = Number(value);
+    const champ = this.championships().find((c: Championship) => c.idChampionship === id) || null;
+    if (champ) {
+      this.selectChampionship(champ);
+    }
+  }
   protected selectChampionship(champ: Championship): void {
     this.selectedChampionship.set(champ);
     this.loadActiveMatchStream();
